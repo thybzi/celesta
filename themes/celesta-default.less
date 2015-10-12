@@ -1,0 +1,204 @@
+@import '__constants';
+@import '__mixins';
+
+
+.celesta-container {
+    display: inline-block;
+    position: relative;
+    height: @celesta-height;
+    .border-radius(@celesta-rounding);
+    font-family: Arial, Helvetica, FreeSans, sans-serif;
+    font-size: @celesta-font-size;
+    line-height: @celesta-line-height;
+    color: @celesta-text-color;
+    .user-select(none);
+
+    & + select {
+        position: absolute;
+        left: -20000px;
+        top: -20000px;
+    }
+
+
+    .celesta-facade {
+        display: block;
+        position: relative;
+        .box-sizing(border-box);
+        height: 100%;
+        padding-right: @celesta-pad-x;
+        border: @celesta-stroke-size solid @celesta-stroke-color;
+        .border-radius(@celesta-rounding);
+        background-color: @celesta-background-color;
+        cursor: pointer;
+
+        &::after {
+            content: '';
+            position: absolute;
+            right: @celesta-pad-x;
+            top: 50%;
+            margin-top: -(round(@celesta-arrow-height / 2));
+            border: @celesta-arrow-height solid @celesta-stroke-color;
+            border-left-color: transparent;
+            border-right-color: transparent;
+            border-bottom-width: 0;
+        }
+    }
+
+    .celesta-facadelabel,
+    .celesta-facade[data-label]:before {
+        display: block;
+        min-width: 1px;
+        padding: (@celesta-pad-y - @celesta-stroke-size) @celesta-pad-x;
+        .text-overflow-ellipsis();
+    }
+
+    .celesta-facade[data-label]:before {
+        content: attr(data-label);
+    }
+
+
+    .celesta-optlist {
+        display: block;
+        position: absolute;
+        top: 100%;
+        left: -20000px;
+        right: 20000px;
+        z-index: @celesta-optlist-zindex;
+        .box-sizing(border-box);
+        min-width: 100%;
+        max-height: (@celesta-visible-options-count * @celesta-height) + (2 * @celesta-stroke-size);
+        overflow: hidden;
+        overflow-y: auto;
+        margin-top: -@celesta-stroke-size;
+        border: @celesta-stroke-size solid @celesta-stroke-color;
+        .border-radius(0 0 @celesta-rounding @celesta-rounding);
+        background-color: @celesta-background-color;
+        opacity: 0;
+        .transition(
+            opacity @celesta-appear-duration @celesta-appear-easing,
+            left 0s @celesta-appear-duration,
+            right 0s @celesta-appear-duration,
+            z-index 0s @celesta-appear-duration;
+        );
+
+        &.celesta-optlist-reversed {
+            top: auto;
+            bottom: 100%;
+            margin-top: 0;
+            margin-bottom: -@celesta-stroke-size;
+        }
+    }
+
+    .celesta-optgroup {
+        display: block;
+        margin: 0;
+        padding: 0;
+        padding-left: @celesta-pad-x;
+
+        &.celesta-optgroup-disabled {
+
+            .celesta-optgrouplabel,
+            &[data-label]:before {
+                opacity: @celesta-disabled-opacity;
+            }
+        }
+    }
+
+    .celesta-option,
+    .celesta-optgrouplabel,
+    .celesta-optgroup[data-label]:before {
+        display: block;
+        margin: 0;
+        padding: @celesta-pad-y @celesta-pad-x;
+        .text-overflow-ellipsis();
+    }
+
+    .celesta-optgroup .celesta-option {
+        margin-left: -@celesta-pad-x;
+        padding-left: 2 * @celesta-pad-x;
+    }
+
+    .celesta-optgrouplabel,
+    .celesta-optgroup[data-label]:before {
+        font-weight: bold;
+        cursor: default;
+        margin-left: -@celesta-pad-x;
+    }
+
+    .celesta-optgroup[data-label]:before {
+        content: attr(data-label);
+    }
+
+    .celesta-option {
+        cursor: pointer;
+
+        &.celesta-option-selected when not (@celesta-option-selected-background-color = no-change) {
+            background-color: @celesta-option-selected-background-color;
+        }
+
+        &.celesta-option-selected when not (@celesta-option-selected-text-color = no-change) {
+            color: @celesta-option-selected-text-color;
+        }
+
+        &.celesta-option-hovered when not (@celesta-option-hovered-background-color = no-change) {
+            background-color: @celesta-option-hovered-background-color;
+        }
+
+        &.celesta-option-hovered when not (@celesta-option-hovered-text-color = no-change) {
+            color: @celesta-option-hovered-text-color;
+        }
+
+        &.celesta-option-disabled {
+            background-color: inherit;
+            color: inherit;
+            opacity: @celesta-disabled-opacity;
+            cursor: default;
+        }
+    }
+
+
+    &.celesta-container-open {
+
+        .celesta-facade {
+            .border-radius(@celesta-rounding @celesta-rounding 0 0);
+
+            &::after {
+                border-top-width: 0;
+                border-bottom-width: @celesta-arrow-height;
+            }
+        }
+
+        .celesta-optlist {
+            left: 0;
+            right: 0;
+            z-index: @celesta-optlist-open-zindex;
+            opacity: 1;
+            .transition(
+                opacity @celesta-appear-duration @celesta-appear-easing,
+                left 0s,
+                right 0s,
+                z-index 0s;
+            );
+        }
+    }
+
+
+    &:focus {
+        outline: none;
+        .box-shadow(0 0 2px @celesta-stroke-color-focused);
+
+        .celesta-facade,
+        .celesta-optlist {
+            border-color: @celesta-stroke-color-focused;
+        }
+    }
+
+
+    &.celesta-container-disabled {
+        opacity: @celesta-disabled-opacity;
+
+        .celesta-facade {
+            cursor: default;
+        }
+    }
+}

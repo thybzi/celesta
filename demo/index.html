@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Celesta demo</title>
+
+    <script src="../celesta.js"></script>
+    <link rel="stylesheet" href="../themes/celesta-default.css">
+
+    <!--[if IE 9]>
+    <script src="../polyfill/classlist.js"></script><![endif]-->
+
+    <script src="vendor/perfect-scrollbar/js/perfect-scrollbar.js"></script>
+    <link rel="stylesheet" href="vendor/perfect-scrollbar/css/perfect-scrollbar.css">
+
+    <!--<link rel="stylesheet" href="http://jscrollpane.kelvinluck.com/style/jquery.jscrollpane.css">-->
+    <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>-->
+    <!--<script src="http://jscrollpane.kelvinluck.com/script/jquery.mousewheel.js"></script>-->
+    <!--<script src="http://jscrollpane.kelvinluck.com/script/jquery.jscrollpane.min.js"></script>-->
+
+    <link rel="stylesheet" href="assets/demo.css">
+
+</head>
+<body>
+
+
+
+
+
+<div class="params-block" id="params-block">
+    <fieldset id="params-wrapper"></fieldset>
+    <fieldset id="states-wrapper"></fieldset>
+    <div id="state-buttons-wrapper"></div>
+</div>
+
+
+
+<form>
+
+    <dl class="form-data">
+
+        <dt><label for="preceding">Preceding input</label></dt>
+        <dd><input id="preceding"></dd>
+
+        <dt><label id="label1">
+                <em>Celesta</em> +
+                <em><a href="http://noraesae.github.io/perfect-scrollbar/" target="_blank">perfect-scrollbar</a></em>
+            </label></dt>
+        <dd id="wrapper1"></dd>
+
+        <dt><label id="label2"><em>Celesta</em> + native scroll</label></dt>
+        <dd id="wrapper2"></dd>
+
+        <dt><label id="label3">Native select</label></dt>
+        <dd id="wrapper3"></dd>
+
+        <dt><label for="following">Following input</label></dt>
+        <dd><input id="following"></dd>
+
+        <dt></dt>
+        <dd>
+            <button type="submit">Submit</button>
+            <button type="reset">Reset</button>
+        </dd>
+
+    </dl>
+
+</form>
+
+<form class="source-block">
+    <textarea id="source" cols="80" rows="20"><select>
+    <optgroup label="Named with numbers">
+        <option value="1">One Republic</option>
+        <option value="2">Two Steps From Hell</option>
+        <option value="3">Three Days Grace</option>
+        <option value="4">Four Seasons</option>
+        <option value="5">Five Nights At Freddy's</option>
+        <option value="6">Six Feet Under</option>
+        <option value="7">Seven Nation Army</option>
+        <option value="8">Eight Below</option>
+        <option value="9">Nine Inch Nails</option>
+        <option value="10">Ten O'Clock Postman</option>
+        <option value="11">Eleven Madison Park</option>
+        <option value="12">Twelve South</option>
+        <option value="13" disabled>Thirteen Reasons Why</option>
+        <option value="14">Fourteen Actors Acting</option>
+        <option value="15">Fifteen Taylor Swift</option>
+        <option value="16">Sixteen Saltlines</option>
+        <option value="17">Seventeen</option>
+        <option value="18">Eighteen Visions</option>
+        <option value="19">Nineteen Hundred And Eighty Five</option>
+        <option value="20">Twenty Dollars In My Pocket</option>
+    </optgroup>
+    <optgroup label="Disabled optgroup" disabled>
+        <option>These</option>
+        <option>Cannot</option>
+        <option>Be</option>
+        <option>Selected</option>
+    </optgroup>
+    <optgroup label="Guitar players">
+        <option value="satriani">Joe Satriani</option>
+        <option value="blackmore">Richie Blackmore</option>
+        <option value="clapton">Eric Clapton</option>
+        <option value="santana">Carlos Santana</option>
+        <option value="zappa">Frank Zappa</option>
+        <option value="hendrix">Jimi Hendrix</option>
+        <option value="malmsteen">Yngwie J. Malmsteen</option>
+        <option value="berry">Chuck Berry</option>
+        <option value="harrison">George Harrison</option>
+        <option value="burton">James Burton</option>
+        <option value="lennon">John Lennon</option>
+        <option value="paul">Les Paul</option>
+        <option value="tolkki">Timo Tollki</option>
+        <option value="zinchuk">Victor Zinchuk</option>
+    </optgroup>
+    <optgroup label="Domain zones" class="flags">
+        <option value="se" class="flag swe">.se (Sweden)</option>
+        <option value="tr" class="flag tur">.tr (Turkey)</option>
+        <option value="br" class="flag bra">.br (Brazil)</option>
+        <option value="es" class="flag esp">.es (Spain)</option>
+    </optgroup>
+    <optgroup label="Tiny group">
+        <option value="disabled" disabled>Disabled option</option>
+        <option value="enabled">Enabled option</option>
+    </optgroup>
+    <optgroup label="Russian words">
+        <option value="babushka">Бабушка (granny)</option>
+        <option value="krasota">Красота (beauty)</option>
+        <option value="balalaika">Балалайка (balalaika)</option>
+        <option value="electrichka">Электричка (suburban train)</option>
+        <option value="odeyalo">Одеяло (blanket)</option>
+    </optgroup>
+</select></textarea>
+    <div>
+        <button type="button" id="apply-source">apply</button>
+        <button type="reset" id="reset-source">reset</button>
+    </div>
+</form>
+
+
+<script>
+
+    var select1,
+        select2,
+        select3,
+        celesta1,
+        celesta2;
+
+    (function() {
+
+        Celesta.prototype.setConfigDefaults({
+            inherit_width: true
+        });
+
+        var textarea = document.getElementById('source'),
+            wrapper1 = document.getElementById('wrapper1'),
+            wrapper2 = document.getElementById('wrapper2'),
+            wrapper3 = document.getElementById('wrapper3'),
+            label1 = document.getElementById('label1'),
+            label2 = document.getElementById('label2'),
+            label3 = document.getElementById('label3'),
+            state_disable_checkbox,
+            state_showoriginal_checkbox,
+            state_destroy_button,
+            is_destroyed;
+
+        var param_names = [
+            'inherit_classes',
+            'inherit_optgroup_classes',
+            'inherit_option_classes',
+            'optlist_smart_reverse',
+            'use_optgroups',
+            'handle_mouse',
+            'outer_mousewheel_close',
+            'handle_arrowkeys',
+            'handle_pagekeys',
+            'enter_key_open',
+            'space_key_open',
+            'enter_key_select',
+            'escape_key_close',
+            'handle_keyboard_typed',
+            'typed_collapse_repeated',
+            'options_type_cycling',
+            'options_nav_cycling',
+            'keyboard_hover_preselect',
+            'mouse_hover_preselect',
+            'mouse_hover_scroll',
+            'fix_ie_mouse_focus',
+            'facadelabel_pseudo',
+            'optgrouplabel_pseudo'
+        ];
+        var param_values = {};
+
+        var container_elem,
+            param_name,
+            param_value,
+            wrapper_elem,
+            action_elem;
+
+        container_elem = document.getElementById('params-wrapper');
+        for (var i = 0; i < param_names.length; i++) {
+            param_name = param_names[i];
+            param_value = Celesta.prototype._config_defaults[param_name];
+            param_values[param_name] = param_value;
+
+            action_elem = document.createElement('input');
+            action_elem.type = 'checkbox';
+            action_elem.value = param_name;
+            action_elem.checked = param_value;
+            action_elem.addEventListener('change', function () {
+                param_values[this.value] = this.checked;
+                recreate();
+            });
+
+            wrapper_elem = document.createElement('label');
+            wrapper_elem.appendChild(action_elem);
+            wrapper_elem.appendChild(document.createTextNode(' ' + param_name));
+
+            container_elem.appendChild(wrapper_elem);
+        }
+
+
+        container_elem = document.getElementById('states-wrapper');
+
+        state_disable_checkbox = document.createElement('input');
+        state_disable_checkbox.type = 'checkbox';
+        state_disable_checkbox.addEventListener('change', refreshDisabled);
+
+        wrapper_elem = document.createElement('label');
+        wrapper_elem.appendChild(state_disable_checkbox);
+        wrapper_elem.appendChild(document.createTextNode(' disable'));
+        container_elem.appendChild(wrapper_elem);
+
+
+        state_showoriginal_checkbox = document.createElement('input');
+        state_showoriginal_checkbox.type = 'checkbox';
+//        state_showoriginal_checkbox.checked = true;
+        state_showoriginal_checkbox.addEventListener('change', refreshShowOriginal);
+
+        wrapper_elem = document.createElement('label');
+        wrapper_elem.appendChild(state_showoriginal_checkbox);
+        wrapper_elem.appendChild(document.createTextNode(' show original'));
+        container_elem.appendChild(wrapper_elem);
+
+
+        container_elem = document.getElementById('state-buttons-wrapper');
+
+        state_destroy_button = document.createElement('button');
+        state_destroy_button.textContent = 'destroy';
+        state_destroy_button.addEventListener('click', destroy);
+        container_elem.appendChild(state_destroy_button);
+
+        action_elem = document.createElement('button');
+        action_elem.textContent = 'recreate';
+        action_elem.addEventListener('click', recreate);
+        container_elem.appendChild(action_elem);
+
+
+        document.getElementById('apply-source').addEventListener('click', recreate);
+        document.getElementById('reset-source').addEventListener('click', function (event) {
+            this.form.reset();
+            recreate();
+            event.preventDefault();
+        });
+        textarea.addEventListener('change', recreate);
+//        textarea.addEventListener('keyup', recreate);
+
+
+        function create() {
+            wrapper1.innerHTML = textarea.value;
+            select1 = wrapper1.firstElementChild;
+            select1.name = 'test1';
+            select1.id = 'test1';
+            select1.className = 'test1';
+            label1.setAttribute('for', select1.id);
+
+            wrapper2.innerHTML = textarea.value;
+            select2 = wrapper2.firstElementChild;
+            select2.name = 'test2';
+            select2.id = 'test2';
+            select2.className = 'test2';
+            label2.setAttribute('for', select2.id);
+//            select2.parentNode.removeChild(select2);
+
+            wrapper3.innerHTML = textarea.value;
+            select3 = wrapper3.firstElementChild;
+            select3.name = 'test3';
+            select3.id = 'test3';
+            select3.className = 'test3';
+            label3.setAttribute('for', select3.id);
+
+            var params1 = JSON.parse(JSON.stringify(param_values)),
+                params2 = JSON.parse(JSON.stringify(param_values));
+
+//            params1.onOpen = function () { Ps.update(this.getOptionList()); };
+//            params1.onDestroy = function () { Ps.destroy(this.getOptionList()); };
+            celesta1 = new Celesta(select1, params1);
+//            celesta1.addEventListener('open', function(){console.log('open 1')});
+//            celesta1.addEventListener('close', function(){console.log('close 1')});
+//            celesta1.addEventListener('change', function(to, from){console.log('change 1: ' + from + ' => ' + to)});
+//            celesta1.addEventListener('optionselect', function(to, from){console.log('select 1: ' + from + ' => ' + to)});
+//            celesta1.addEventListener('optionpreselect', function(to, from){console.log('preselect 1: ' + from + ' => ' + to)});
+//            celesta1.addEventListener('optionhover', function(to, from){console.log('hover 1: ' + from + ' => ' + to)});
+//            celesta1.addEventListener('focus', function(){console.log('focus 1')});
+//            celesta1.addEventListener('blur', function(){console.log('blur 1')});
+            Ps.initialize(celesta1.getOptlist(), { suppressScrollX: true });
+//            $(celesta1.getOptlist()).jScrollPane();
+
+            celesta2 = new Celesta(select2, params2);
+//            celesta1.addEventListener('open', function(){console.log('open 2')});
+//            celesta1.addEventListener('close', function(){console.log('close 2')});
+//            celesta1.addEventListener('change', function(to, from){console.log('change 2: ' + from + ' => ' + to)});
+//            celesta1.addEventListener('optionselect', function(to, from){console.log('select 2: ' + from + ' => ' + to)});
+//            celesta1.addEventListener('optionpreselect', function(to, from){console.log('preselect 2: ' + from + ' => ' + to)});
+//            celesta1.addEventListener('optionhover', function(to, from){console.log('hover 2: ' + from + ' => ' + to)});
+//            celesta1.addEventListener('focus', function(){console.log('focus 2')});
+//            celesta1.addEventListener('blur', function(){console.log('blur 2')});
+
+            is_destroyed = false;
+            state_destroy_button.disabled = false;
+            state_showoriginal_checkbox.disabled = false;
+
+            refreshDisabled();
+            refreshShowOriginal();
+        }
+
+        function destroy() {
+            if (!is_destroyed) {
+                celesta1.destroy();
+                celesta2.destroy();
+                is_destroyed = true;
+                state_destroy_button.disabled = true;
+                state_showoriginal_checkbox.disabled = true;
+            }
+        }
+
+        function recreate() {
+            destroy();
+            create();
+        }
+
+
+        function refreshDisabled() {
+            if (is_destroyed) {
+                select1.disabled = state_disable_checkbox.checked;
+                select2.disabled = state_disable_checkbox.checked;
+            } else {
+                celesta1.setDisabled(state_disable_checkbox.checked);
+                celesta2.setDisabled(state_disable_checkbox.checked);
+            }
+            select3.disabled = state_disable_checkbox.checked;
+        }
+
+
+        function refreshShowOriginal() {
+            if (state_showoriginal_checkbox.checked) {
+                select1.setAttribute('data-visible', '');
+                select2.setAttribute('data-visible', '');
+            } else {
+                select1.removeAttribute('data-visible');
+                select2.removeAttribute('data-visible');
+            }
+        }
+
+        create();
+
+    })();
+
+</script>
+
+
+</body>
+</html>

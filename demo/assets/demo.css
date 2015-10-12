@@ -1,0 +1,169 @@
+
+body {
+    background-color: #f9f9f9;
+    color: #2f2f2f;
+    font-family: Arial, Helvetica, FreeSans, sans-serif;
+    font-size: 14px;
+    line-height: 18px;
+}
+
+.form-data {
+    width: 500px;
+}
+
+.form-data::after {
+    content: '';
+    display: block;
+    clear: both;
+    height: 0;
+}
+
+.form-data dt,
+.form-data dd {
+    margin: 0 0 15px;
+    padding: 0;
+    font: inherit;
+    min-height: 24px;
+}
+
+.form-data dt {
+    float: left;
+    clear: left;
+    width: 180px;
+    text-align: right;
+}
+
+.form-data dd {
+    float: right;
+    clear: right;
+    width: 300px;
+}
+
+.form-data label,
+.form-data input,
+select,
+.celesta-container,
+button {
+    vertical-align: top;
+}
+
+.form-data label {
+    display: inline-block;
+    line-height: 24px;
+}
+
+.form-data label a {
+    color: inherit;
+    text-decoration: underline;
+}
+
+.form-data input,
+select,
+button {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    height: 24px;
+    vertical-align: middle;
+    font-family: Arial, Helvetica, FreeSans, sans-serif;
+    font-size: 14px;
+    line-height: 18px;
+}
+
+button {
+    padding-left: 6px;
+    padding-right: 6px;
+}
+
+button + button {
+    margin-left: 8px;
+}
+
+form {
+    float: left;
+    clear: left;
+}
+
+.params-block {
+    float: right;
+    width: 230px;
+    padding: 15px;
+}
+
+.params-block fieldset {
+    border-width: 0;
+    border-bottom: 1px solid #ccc;
+    padding: 0 3px 10px;
+    margin: 0 -3px 10px;
+}
+
+.params-block div {
+    margin-top: 15px;
+}
+
+.params-block label {
+    display: block;
+    white-space: nowrap;
+}
+
+.params-block label input {
+    vertical-align: middle;
+}
+
+.source-block {
+    position: relative;
+    padding: 15px;
+}
+
+.source-block div {
+    position: absolute;
+    top: 25px;
+    right: 40px;
+}
+
+
+.celesta-option.flag:before,
+.celesta-facadelabel.flag:before {
+    content: '';
+    display: inline-block;
+    width: 16px;
+    height: 10px;
+    margin-right: 5px;
+    vertical-align: baseline;
+    -webkit-background-size: 100% 100%;
+    -moz-background-size: 100% 100%;
+    -o-background-size: 100% 100%;
+    background-size: 100% 100%;
+}
+
+.celesta-option.flag.swe:before,
+.celesta-facadelabel.flag.swe:before {
+    background-image: url(https://upload.wikimedia.org/wikipedia/commons/4/4c/Flag_of_Sweden.svg);
+}
+
+.celesta-option.flag.tur:before,
+.celesta-facadelabel.flag.tur:before {
+    background-image: url(https://upload.wikimedia.org/wikipedia/commons/b/b4/Flag_of_Turkey.svg);
+}
+
+.celesta-option.flag.bra:before,
+.celesta-facadelabel.flag.bra:before {
+    background-image: url(https://upload.wikimedia.org/wikipedia/commons/0/05/Flag_of_Brazil.svg);
+}
+
+.celesta-option.flag.esp:before,
+.celesta-facadelabel.flag.esp:before {
+    background-image: url(https://upload.wikimedia.org/wikipedia/commons/9/9a/Flag_of_Spain.svg);
+}
+
+
+
+.celesta-container .ps-container > .ps-scrollbar-x-rail,
+.celesta-container .ps-container > .ps-scrollbar-y-rail {
+    opacity: 0.6;
+}
+
+.celesta-container + select[data-visible] {
+    left: 500px;
+    top: auto;
+}

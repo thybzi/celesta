@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Celesta QUnit tests</title>
+    <link rel="stylesheet" href="../node_modules/qunitjs/qunit/qunit.css">
+    <link rel="stylesheet" href="../themes/celesta-default.css">
+    <script src="../celesta.js"></script>
+    <!--[if IE 9]><script src="../polyfill/classlist.js"></script><![endif]-->
+    <script src="qunit-constants.js"></script>
+</head>
+<body>
+<div id="qunit"></div>
+<div id="qunit-fixture"></div>
+<script src="../node_modules/qunitjs/qunit/qunit.js"></script>
+
+
+<script>
+
+    function qs(selector, container) {
+        container = container || wrapper;
+        return container.querySelector(selector);
+    }
+    function qsa(selector, container) {
+       container = container || wrapper;
+       return container.querySelectorAll(selector);
+    }
+
+    var wrapper = document.getElementById('qunit-fixture');
+
+
+
+    QUnit.module('Initial selected option index');
+    QUnit.test('None of options has "selected" attribute', function (assert) {
+        wrapper.innerHTML = M_SELECT_SIMPLE;
+        var celesta = new Celesta(wrapper.firstElementChild);
+        assert.strictEqual(celesta.getSelectedOptionIndex(), 0, 'option #0 is selected');
+    });
+    QUnit.test('None of options has "selected" attribute, select has "disabled" attribute', function (assert) {
+        wrapper.innerHTML = M_SELECT_SIMPLE_DISABLED;
+        var celesta = new Celesta(wrapper.firstElementChild);
+        assert.strictEqual(celesta.getSelectedOptionIndex(), 0, 'option #0 is selected');
+    });
+    QUnit.test('Option #1 has "selected" attribute', function (assert) {
+        wrapper.innerHTML = M_SELECT_SIMPLE__OPTION_SELECTED;
+        var celesta = new Celesta(wrapper.firstElementChild);
+        assert.strictEqual(celesta.getSelectedOptionIndex(), 1, 'option #1 is selected');
+    });
+    QUnit.test('Option #1 has "selected" and "disabled" attributes', function (assert) {
+        wrapper.innerHTML = M_SELECT_SIMPLE__OPTION_DISABLED_SELECTED;
+        var celesta = new Celesta(wrapper.firstElementChild);
+        assert.strictEqual(celesta.getSelectedOptionIndex(), 1, 'option #1 is selected');
+    });
+
+
+    QUnit.module('Option select');
+    QUnit.test('Select another option', function (assert) {
+        wrapper.innerHTML = M_SELECT_SIMPLE;
+        var celesta = new Celesta(wrapper.firstElementChild);
+        celesta.selectOption(1);
+        assert.strictEqual(celesta.getSelectedOptionIndex(), 1, 'option #1 is selected');
+    });
+    QUnit.test('Try to select another option when select has "disabled" attribute', function (assert) {
+        wrapper.innerHTML = M_SELECT_SIMPLE_DISABLED;
+        var celesta = new Celesta(wrapper.firstElementChild);
+        celesta.selectOption(1);
+        assert.strictEqual(celesta.getSelectedOptionIndex(), 0, 'option #0 is still selected');
+    });
+    QUnit.test('Force select another option when select has "disabled" attribute', function (assert) {
+        wrapper.innerHTML = M_SELECT_SIMPLE_DISABLED;
+        var celesta = new Celesta(wrapper.firstElementChild);
+        celesta.selectOption(1, true);
+        assert.strictEqual(celesta.getSelectedOptionIndex(), 1, 'option #1 is selected');
+    });
+    QUnit.test('Try to select another option which has "disabled" attribute', function (assert) {
+        wrapper.innerHTML = M_SELECT_SIMPLE__OPTION_DISABLED;
+        var celesta = new Celesta(wrapper.firstElementChild);
+        celesta.selectOption(1);
+        assert.strictEqual(celesta.getSelectedOptionIndex(), 0, 'option #0 is still selected');
+    });
+    QUnit.test('Force select another option which has "disabled" attribute', function (assert) {
+        wrapper.innerHTML = M_SELECT_SIMPLE__OPTION_DISABLED;
+        var celesta = new Celesta(wrapper.firstElementChild);
+        celesta.selectOption(1, true);
+        assert.strictEqual(celesta.getSelectedOptionIndex(), 1, 'option #1 is still selected');
+    });
+    QUnit.test('Try to select non-existant option', function (assert) {
+        wrapper.innerHTML = M_SELECT_SIMPLE;
+        var celesta = new Celesta(wrapper.firstElementChild);
+        celesta.selectOption(7);
+        assert.strictEqual(celesta.getSelectedOptionIndex(), 0, 'option #0 is still selected');
+    });
+    QUnit.test('Force select non-existant option', function (assert) {
+        wrapper.innerHTML = M_SELECT_SIMPLE;
+        var celesta = new Celesta(wrapper.firstElementChild);
+        celesta.selectOption(7, true);
+        assert.strictEqual(celesta.getSelectedOptionIndex(), 0, 'option #0 is still selected');
+    });
+
+
+
+    /**
+     * @todo Also test tagnames?
+     */
+    QUnit.module('Overall markup');
+    QUnit.test('Basic markup', function (assert) {
+        wrapper.innerHTML = M_SELECT_SIMPLE;
+        var celesta = new Celesta(wrapper.firstElementChild),
+            container = celesta.getContainer(),
+            facade = celesta.getFacade(),
+            optlist = celesta.getOptlist();
+
+        assert.strictEqual(qsa(S_CONTAINER).length, 1, 'container created');
+        assert.strictEqual(qs(S_CONTAINER), container, 'container valid');
+        assert.strictEqual(container.childNodes.length, 2, 'container has two children');
+        assert.strictEqual(container.childNodes[0], facade, 'container first child is facade');
+        assert.ok(container.childNodes[0].classList.contains(C_FACADE), 'container first child has valid classname for facade');
+        assert.strictEqual(container.childNodes[1], optlist, 'container second child is optlist');
+        assert.ok(container.childNodes[1].classList.contains(C_OPTLIST), 'container second child has valid classname for optlist');
+
+        assert.strictEqual(optlist.childNodes.length, 3, 'optlist has three children');
+        assert.ok(optlist.childNodes[0].classList.contains(C_OPTION), 'optlist first child has valid classname for option');
+        assert.strictEqual(optlist.childNodes[0].innerText, 'One', 'optlist first child text is "One"');
+        assert.ok(optlist.childNodes[1].classList.contains(C_OPTION), 'optlist second child has valid classname for option');
+        assert.strictEqual(optlist.childNodes[1].innerText, 'Two', 'optlist second child text is "Two"');
+        assert.ok(optlist.childNodes[2].classList.contains(C_OPTION), 'optlist third child has valid classname for option');
+        assert.strictEqual(optlist.childNodes[2].innerText, 'Three', 'optlist third child text is "Three"');
+    });
+
+
+    QUnit.module('Markup for facadelabel (facadelabel_pseudo option)');
+    QUnit.test('Use pseudo element for facadelabel', function (assert) {
+        wrapper.innerHTML = M_SELECT_SIMPLE;
+        var celesta = new Celesta(wrapper.firstElementChild, { facadelabel_pseudo: true }),
+            facade = celesta.getFacade();
+
+        // Initially, option #0 is selected (tested in 'Initial selected option index' module)
+        assert.strictEqual(facade.childNodes.length, 0, 'facade has no children');
+        assert.strictEqual(facade.getAttribute('data-label'), 'One', 'facade data-label value matches selected option text');
+    });
+    QUnit.test('Use true HTML element for facadelabel', function (assert) {
+        wrapper.innerHTML = M_SELECT_SIMPLE;
+        var celesta = new Celesta(wrapper.firstElementChild, { facadelabel_pseudo: false }),
+            facade = celesta.getFacade();
+
+        // Initially, option #0 is selected (tested in 'Initial selected option index' module)
+        assert.strictEqual(facade.childNodes.length, 1, 'facade has one child');
+        assert.ok(facade.childNodes[0].classList.contains(C_FACADELABEL), 'facade child has valid classname for facadelabel');
+        assert.strictEqual(facade.childNodes[0].textContent, 'One', 'facade child text matches selected option text');
+    });
+
+
+
+
+    QUnit.module('Methods for keys navigation');
+    QUnit.test('Arrows up and down @ closed optlist, enabled options, same optgroup', function (assert) {
+        wrapper.innerHTML = M_SELECT_COMPLEX;
+        var celesta = new Celesta(wrapper.firstElementChild);
+
+        // Initially, option #0 is selected (tested in 'Initial selected option index' module)
+
+        // Go down to option #1
+        celesta.arrowDown();
+        assert.strictEqual(celesta.getSelectedOptionIndex(), 1, 'went down changing selected option: #0 => #1');
+
+        // Go down to option #2
+        celesta.arrowDown();
+        assert.strictEqual(celesta.getSelectedOptionIndex(), 2, 'went down changing selected option: #1 => #2');
+
+        // Go up, back to option #1
+        celesta.arrowUp();
+        assert.strictEqual(celesta.getSelectedOptionIndex(), 1, 'went up changing selected option: #2 => #1');
+
+        // Go up, back to option #0
+        celesta.arrowUp();
+        assert.strictEqual(celesta.getSelectedOptionIndex(), 0, 'went up changing selected option: #1 => #0');
+    });
+    QUnit.test('Pages up and down @ closed optlist, enabled options, same optgroup', function (assert) {
+        wrapper.innerHTML = M_SELECT_COMPLEX;
+        var celesta = new Celesta(wrapper.firstElementChild);
+
+        // Initially, option #0 is selected (tested in 'Initial selected option index' module)
+
+        // Go down to option #3
+        celesta.pageDown();
+        assert.strictEqual(celesta.getSelectedOptionIndex(), 3, 'went down changing selected option: #0 => #1');
+
+        // Go down to option #6
+        celesta.pageDown();
+        assert.strictEqual(celesta.getSelectedOptionIndex(), 6, 'went down changing selected option: #3 => #6');
+
+        // Go up, back to option #3
+        celesta.pageUp();
+        assert.strictEqual(celesta.getSelectedOptionIndex(), 3, 'went up changing selected option: #6 => #3');
+
+        // Go up, back to option #0
+        celesta.pageUp();
+        assert.strictEqual(celesta.getSelectedOptionIndex(), 0, 'went up changing selected option: #3 => #0');
+    });
+    QUnit.test('Arrows up and down @ open optlist, enabled options, same optgroup', function (assert) {
+        wrapper.innerHTML = M_SELECT_COMPLEX;
+        var celesta = new Celesta(wrapper.firstElementChild);
+
+        // Initially, option #0 is selected (tested in 'Initial selected option index' module)
+
+        celesta.open();
+
+        // Go down to option #3
+        celesta.arrowDown();
+        assert.strictEqual(celesta.getHoveredOptionIndex(), 1, 'went down changing hovered option: none => #1');
+
+        // Go down to option #2
+        celesta.arrowDown();
+        assert.strictEqual(celesta.getHoveredOptionIndex(), 2, 'went down changing hovered option: #1 => #2');
+
+        // Go up, back to option #1
+        celesta.arrowUp();
+        assert.strictEqual(celesta.getHoveredOptionIndex(), 1, 'went up changing hovered option: #2 => #1');
+
+        // Go up, back to option #0
+        celesta.arrowUp();
+        assert.strictEqual(celesta.getHoveredOptionIndex(), 0, 'went up changing hovered option: #1 => #0');
+    });
+
+</script>
+</body>
+</html>

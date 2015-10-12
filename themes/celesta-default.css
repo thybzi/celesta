@@ -1,0 +1,174 @@
+.celesta-container {
+  display: inline-block;
+  position: relative;
+  height: 24px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  font-family: Arial, Helvetica, FreeSans, sans-serif;
+  font-size: 14px;
+  line-height: 18px;
+  color: #000000;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+.celesta-container + select {
+  position: absolute;
+  left: -20000px;
+  top: -20000px;
+}
+.celesta-container .celesta-facade {
+  display: block;
+  position: relative;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  height: 100%;
+  padding-right: 8px;
+  border: 1px solid #aaaaaa;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  background-color: #ffffff;
+  cursor: pointer;
+}
+.celesta-container .celesta-facade::after {
+  content: '';
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  margin-top: -2px;
+  border: 4px solid #aaaaaa;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  border-bottom-width: 0;
+}
+.celesta-container .celesta-facadelabel,
+.celesta-container .celesta-facade[data-label]:before {
+  display: block;
+  min-width: 1px;
+  padding: 2px 8px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.celesta-container .celesta-facade[data-label]:before {
+  content: attr(data-label);
+}
+.celesta-container .celesta-optlist {
+  display: block;
+  position: absolute;
+  top: 100%;
+  left: -20000px;
+  right: 20000px;
+  z-index: 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  min-width: 100%;
+  max-height: 290px;
+  overflow: hidden;
+  overflow-y: auto;
+  margin-top: -1px;
+  border: 1px solid #aaaaaa;
+  -webkit-border-radius: 0 0 3px 3px;
+  -moz-border-radius: 0 0 3px 3px;
+  border-radius: 0 0 3px 3px;
+  background-color: #ffffff;
+  opacity: 0;
+  -webkit-transition: opacity 0.3s ease, left 0s 0.3s, right 0s 0.3s, z-index 0s 0.3s;
+  -moz-transition: opacity 0.3s ease, left 0s 0.3s, right 0s 0.3s, z-index 0s 0.3s;
+  transition: opacity 0.3s ease, left 0s 0.3s, right 0s 0.3s, z-index 0s 0.3s;
+}
+.celesta-container .celesta-optlist.celesta-optlist-reversed {
+  top: auto;
+  bottom: 100%;
+  margin-top: 0;
+  margin-bottom: -1px;
+}
+.celesta-container .celesta-optgroup {
+  display: block;
+  margin: 0;
+  padding: 0;
+  padding-left: 8px;
+}
+.celesta-container .celesta-optgroup.celesta-optgroup-disabled .celesta-optgrouplabel,
+.celesta-container .celesta-optgroup.celesta-optgroup-disabled[data-label]:before {
+  opacity: 0.5;
+}
+.celesta-container .celesta-option,
+.celesta-container .celesta-optgrouplabel,
+.celesta-container .celesta-optgroup[data-label]:before {
+  display: block;
+  margin: 0;
+  padding: 3px 8px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.celesta-container .celesta-optgroup .celesta-option {
+  margin-left: -8px;
+  padding-left: 16px;
+}
+.celesta-container .celesta-optgrouplabel,
+.celesta-container .celesta-optgroup[data-label]:before {
+  font-weight: bold;
+  cursor: default;
+  margin-left: -8px;
+}
+.celesta-container .celesta-optgroup[data-label]:before {
+  content: attr(data-label);
+}
+.celesta-container .celesta-option {
+  cursor: pointer;
+}
+.celesta-container .celesta-option.celesta-option-selected {
+  background-color: #eeeeff;
+}
+.celesta-container .celesta-option.celesta-option-selected {
+  color: #cc0000;
+}
+.celesta-container .celesta-option.celesta-option-hovered {
+  background-color: #ddddff;
+}
+.celesta-container .celesta-option.celesta-option-disabled {
+  background-color: inherit;
+  color: inherit;
+  opacity: 0.5;
+  cursor: default;
+}
+.celesta-container.celesta-container-open .celesta-facade {
+  -webkit-border-radius: 3px 3px 0 0;
+  -moz-border-radius: 3px 3px 0 0;
+  border-radius: 3px 3px 0 0;
+}
+.celesta-container.celesta-container-open .celesta-facade::after {
+  border-top-width: 0;
+  border-bottom-width: 4px;
+}
+.celesta-container.celesta-container-open .celesta-optlist {
+  left: 0;
+  right: 0;
+  z-index: 1;
+  opacity: 1;
+  -webkit-transition: opacity 0.3s ease, left 0s, right 0s, z-index 0s;
+  -moz-transition: opacity 0.3s ease, left 0s, right 0s, z-index 0s;
+  transition: opacity 0.3s ease, left 0s, right 0s, z-index 0s;
+}
+.celesta-container:focus {
+  outline: none;
+  -webkit-box-shadow: 0 0 2px #7a9cd3;
+  -moz-box-shadow: 0 0 2px #7a9cd3;
+  box-shadow: 0 0 2px #7a9cd3;
+}
+.celesta-container:focus .celesta-facade,
+.celesta-container:focus .celesta-optlist {
+  border-color: #7a9cd3;
+}
+.celesta-container.celesta-container-disabled {
+  opacity: 0.5;
+}
+.celesta-container.celesta-container-disabled .celesta-facade {
+  cursor: default;
+}

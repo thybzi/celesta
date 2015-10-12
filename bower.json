@@ -1,0 +1,36 @@
+{
+  "name": "celesta",
+  "main": "celesta.js",
+  "version": "0.1.0",
+  "homepage": "https://github.com/thybzi/celesta",
+  "authors": [
+    "Evgeni Dmitriev <thybzi@gmail.com>"
+  ],
+  "description": "Custom selectbox with look and feel of native one",
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "select",
+    "selectbox",
+    "form",
+    "custom",
+    "customizable",
+    "mouse",
+    "keyboard",
+    "arrows",
+    "pageup",
+    "pagedown",
+    "typing",
+    "typed"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "tests"
+  ]
+}
