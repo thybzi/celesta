@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Celesta : Custom selectbox with look and feel of native one">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Celesta</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/thybzi/celesta">View on GitHub</a>
+
+          <h1 id="project_title">Celesta</h1>
+          <h2 id="project_tagline">Custom selectbox with look and feel of native one</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/thybzi/celesta/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/thybzi/celesta/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a id="celesta" class="anchor" href="#celesta" aria-hidden="true"><span class="octicon octicon-link"></span></a>Celesta</h1>
+
+<p>Custom selectbox with look and feel of native one. 
+(Just see the <a href="http://thybzi.github.io/celesta/demo/">demo</a>.)</p>
+
+<ul>
+<li>Pure JavaScript library working on top of native browser selectbox</li>
+<li>Looks like <code>&lt;select&gt;</code>, feels like <code>&lt;select&gt;</code>, and quacks like <code>&lt;select&gt;</code> </li>
+<li>Fully skinnable with CSS (including dropdown)</li>
+</ul>
+
+<h3>
+<a id="browser-support" class="anchor" href="#browser-support" aria-hidden="true"><span class="octicon octicon-link"></span></a>Browser support</h3>
+
+<ul>
+<li>IE 10+ (or 9+ with <code>classList</code> <a href="polyfill/classlist.js">polyfill</a>)</li>
+<li>Opera 11.6+</li>
+<li>Safari 5.1.4+</li>
+<li>Firefox 4+</li>
+<li>Chrome 8+</li>
+<li>(?) iOS Safari 6+</li>
+<li>(?) Android Browser 4+ (or 2+ with <code>classList</code> and <code>bind</code> polyfills)</li>
+<li>(?) Opera Mobile 12+</li>
+<li>(?) IE Mobile 10+</li>
+</ul>
+
+<h3>
+<a id="basic-usage" class="anchor" href="#basic-usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Basic usage</h3>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">new</span> <span class="pl-en">Celesta</span>(<span class="pl-c1">document</span>.<span class="pl-c1">getElementById</span>(<span class="pl-s"><span class="pl-pds">'</span>my_select<span class="pl-pds">'</span></span>));</pre></div>
+
+<p>Or, a little more advanced example:</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> selectbox <span class="pl-k">=</span> <span class="pl-c1">document</span>.querySelector(<span class="pl-s"><span class="pl-pds">'</span>.some-select<span class="pl-pds">'</span></span>);
+<span class="pl-k">var</span> celesta <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Celesta</span>(selectbox, {
+    space_key_open<span class="pl-k">:</span> <span class="pl-c1">false</span>,
+    options_navkey_cycling<span class="pl-k">:</span> <span class="pl-c1">true</span>,
+    closed_options_pagekey_jump_by<span class="pl-k">:</span> <span class="pl-c1">5</span>
+});
+
+celesta.selectOption(<span class="pl-c1">3</span>);
+
+celesta.addEventListener(<span class="pl-s"><span class="pl-pds">'</span>open<span class="pl-pds">'</span></span>, myCallbackFunction);
+celesta.<span class="pl-c1">open</span>();
+celesta.hoverOption(<span class="pl-c1">6</span>);
+celesta.<span class="pl-c1">close</span>();
+
+celesta.refresh();
+celesta.destroy();</pre></div>
+
+<p>For more advanced usage, see <a href="#options-reference">Options</a>, <a href="#methods-reference">Methods</a> and <a href="#events-reference">Events</a> reference.
+Also, you can see <a href="http://thybzi.github.io/celesta/demo/">the demo</a>.</p>
+
+<h3>
+<a id="features" class="anchor" href="#features" aria-hidden="true"><span class="octicon octicon-link"></span></a>Features</h3>
+
+<ul>
+<li>Support for optgroups, disabled state, disabled options/groups</li>
+<li>Classname inheritance for select and options</li>
+<li>Element and dropdown fully skinnable with CSS (no hardcoded CSS properties)</li>
+<li>Automatic dropdown reverse to fit browser window viewable area</li>
+<li>Dropdown scrolling: 
+
+<ul>
+<li>native browser way, or</li>
+<li>custom scrollbar libs such as <a href="http://noraesae.github.io/perfect-scrollbar/">perfect-scrollbar</a>
+</li>
+</ul>
+</li>
+<li>Mouse support:
+
+<ul>
+<li>Focus with associated label click</li>
+<li>Open with click</li>
+<li>Highlight option with mouse hover</li>
+<li>Select &amp; close with option click</li>
+<li>Close with outer click or outer mousewheel</li>
+</ul>
+</li>
+<li>Keyboard support:
+
+<ul>
+<li>Navigatable with <kbd>Tab</kbd>
+</li>
+<li>Open with <kbd>Space</kbd> or <kbd>Enter</kbd>
+</li>
+<li>Navigate through options with arrow keys (<kbd>↑</kbd> &amp; <kbd>↓</kbd>), <kbd>PageUp</kbd> or <kbd>PageDown</kbd>
+</li>
+<li>Find option by <em>keyboard typing</em> (quicksearch)</li>
+<li>Close with <kbd>Esc</kbd>, select &amp; close with <kbd>Enter</kbd>
+</li>
+</ul>
+</li>
+<li>Interaction:
+
+<ul>
+<li>Source <code>&lt;select&gt;</code> remains in DOM</li>
+<li>Option select interaction: Celesta ↔ native select</li>
+<li>Resets value on form reset</li>
+<li>
+<a href="#methods-reference">JavaScript API</a> to control Celesta instance</li>
+<li>
+<a href="#events-reference">Events handling</a> with <code>addEventListener</code>
+</li>
+</ul>
+</li>
+<li>Falls back to native selectbox if cannot initialize</li>
+<li>
+<a href="#options-reference">Plenty of options</a> to customize UX; see <a href="http://thybzi.github.io/celesta/demo/">the demo</a> to play with some of them</li>
+<li>No external library or framework dependencies</li>
+<li>Usage mode: AMD, CommonJS or direct <code>&lt;script&gt;</code>
+</li>
+<li>Available in <code>npm</code> and <code>bower</code>
+</li>
+</ul>
+
+<h3>
+<a id="beta-warning" class="anchor" href="#beta-warning" aria-hidden="true"><span class="octicon octicon-link"></span></a>Beta warning</h3>
+
+<p>This library is still under construction. 
+API methods, option names, event callback interface, CSS classnames etc. can be changed at any time.</p>
+
+<h3>
+<a id="todo-list--known-issues" class="anchor" href="#todo-list--known-issues" aria-hidden="true"><span class="octicon octicon-link"></span></a>Todo list &amp; known issues</h3>
+
+<ul>
+<li>
+<code>multiple</code> select support</li>
+<li>PageUp/PageDown behavior isn't perfect, and not always matching native select behavior</li>
+<li>jQuery plugin</li>
+<li>Make work better with <a href="http://jscrollpane.kelvinluck.com/">jScrollPane</a>
+</li>
+<li>UX testing on mobile devices</li>
+<li>(?) Put source select element inside (not after) Celesta container</li>
+<li>(?) Fall back to native option list on mobile devices</li>
+<li>(?) Methods call chaining</li>
+<li>(?) Link to source elements, not indexes (benchmarking needed)</li>
+<li>(?) Better feature detection on initialization</li>
+<li>Skin generator</li>
+</ul>
+
+<h3>
+<a id="never-to-be-implemented" class="anchor" href="#never-to-be-implemented" aria-hidden="true"><span class="octicon octicon-link"></span></a>Never to be implemented</h3>
+
+<ul>
+<li>Significant UI/UX change compared to native selectbox (if you want something "fancier", try <a href="https://harvesthq.github.io/chosen/">Chosen</a> or things like that)</li>
+</ul>
+
+<h3>
+<a id="options-reference" class="anchor" href="#options-reference" aria-hidden="true"><span class="octicon octicon-link"></span></a>Options reference</h3>
+
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Accepted value</th>
+<th>Default value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>width</strong></td>
+<td>
+<em>number</em> | <code>null</code>
+</td>
+<td><code>null</code></td>
+<td>Explicit element width (<code>null</code> for automatic/inherited width)</td>
+</tr>
+<tr>
+<td><strong>height</strong></td>
+<td>
+<em>number</em> | <code>null</code>
+</td>
+<td><code>null</code></td>
+<td>Explicit element height (<code>null</code> for automatic/inherited width)</td>
+</tr>
+<tr>
+<td><strong>inherit_width</strong></td>
+<td><em>boolean</em></td>
+<td><code>false</code></td>
+<td>Inherit source select width</td>
+</tr>
+<tr>
+<td><strong>inherit_height</strong></td>
+<td><em>boolean</em></td>
+<td><code>false</code></td>
+<td>Inherit source select height</td>
+</tr>
+<tr>
+<td><strong>inherit_classes</strong></td>
+<td><em>boolean</em></td>
+<td><code>true</code></td>
+<td>Inherit classnames from source select</td>
+</tr>
+<tr>
+<td><strong>inherit_optgroup_classes</strong></td>
+<td><em>boolean</em></td>
+<td><code>true</code></td>
+<td>Inherit classnames from every source optgroup to correspondent generated element</td>
+</tr>
+<tr>
+<td><strong>inherit_option_classes</strong></td>
+<td><em>boolean</em></td>
+<td><code>true</code></td>
+<td>Inherit classnames from every source option to correspondent generated element (and facade label, if selected)</td>
+</tr>
+<tr>
+<td><strong>optlist_smart_reverse</strong></td>
+<td><em>boolean</em></td>
+<td><code>true</code></td>
+<td>Detect best dropdown direction (down/up) based on available space and scroll position</td>
+</tr>
+<tr>
+<td><strong>use_optgroups</strong></td>
+<td><em>boolean</em></td>
+<td><code>true</code></td>
+<td>Find optgroups in source select and generate correspondent containers in optlist</td>
+</tr>
+<tr>
+<td><strong>handle_mouse</strong></td>
+<td><em>boolean</em></td>
+<td><code>true</code></td>
+<td>Handle mouse events (click, hover etc.)</td>
+</tr>
+<tr>
+<td><strong>outer_mousewheel_close</strong></td>
+<td><em>boolean</em></td>
+<td><code>true</code></td>
+<td>Close open Celesta when mouse wheel used out of its area (requires <em>handle_mouse</em> to be enabled)</td>
+</tr>
+<tr>
+<td><strong>handle_arrowkeys</strong></td>
+<td><em>boolean</em></td>
+<td><code>true</code></td>
+<td>Handle pressing arrow keys (<kbd>↑</kbd>/<kbd>↓</kbd>)</td>
+</tr>
+<tr>
+<td><strong>handle_pagekeys</strong></td>
+<td><em>boolean</em></td>
+<td><code>true</code></td>
+<td>Handle pressing <kbd>PageUp</kbd>/<kbd>PageDown</kbd> keys</td>
+</tr>
+<tr>
+<td><strong>enter_key_open</strong></td>
+<td><em>boolean</em></td>
+<td><code>true</code></td>
+<td>Open closed Celesta with <kbd>Enter</kbd> key</td>
+</tr>
+<tr>
+<td><strong>space_key_open</strong></td>
+<td><em>boolean</em></td>
+<td><code>true</code></td>
+<td>Open closed Celesta with <kbd>Space</kbd> key</td>
+</tr>
+<tr>
+<td><strong>enter_key_select</strong></td>
+<td><em>boolean</em></td>
+<td><code>true</code></td>
+<td>Select hovered option with <kbd>Enter</kbd> key</td>
+</tr>
+<tr>
+<td><strong>escape_key_close</strong></td>
+<td><em>boolean</em></td>
+<td><code>true</code></td>
+<td>Close open Celesta with <kbd>Esc</kbd> key</td>
+</tr>
+<tr>
+<td><strong>handle_keyboard_typed</strong></td>
+<td><em>boolean</em></td>
+<td><code>true</code></td>
+<td>Enable options quicksearch with keyboard typing</td>
+</tr>
+<tr>
+<td><strong>typed_life</strong></td>
+<td><em>number</em></td>
+<td><code>1000</code></td>
+<td>Storing life (milliseconds) for previously typed quicksearch characters if no other char is typed</td>
+</tr>
+<tr>
+<td><strong>typed_collapse_repeated</strong></td>
+<td><em>boolean</em></td>
+<td><code>true</code></td>
+<td>When a single key press hold detected, cycle through matching options</td>
+</tr>
+<tr>
+<td><strong>closed_options_pagekey_jump_by</strong></td>
+<td><em>number</em></td>
+<td><code>3</code></td>
+<td>
+<kbd>PageUp</kbd>/<kbd>PageDown</kbd> jump size on closed Celesta</td>
+</tr>
+<tr>
+<td><strong>open_options_pagekey_jump_by</strong></td>
+<td>
+<em>number</em> | <code>true</code>
+</td>
+<td><code>true</code></td>
+<td>
+<kbd>PageUp</kbd>/<kbd>PageDown</kbd> jump size on open Celesta(<code>true</code> for jump to first invisible item)</td>
+</tr>
+<tr>
+<td><strong>options_type_cycling</strong></td>
+<td><em>boolean</em></td>
+<td><code>true</code></td>
+<td>Cycle options forward when quicksearch typing</td>
+</tr>
+<tr>
+<td><strong>options_nav_cycling</strong></td>
+<td><em>boolean</em></td>
+<td><code>false</code></td>
+<td>Cycle options forward/backward with arrow and page keys</td>
+</tr>
+<tr>
+<td><strong>keyboard_hover_preselect</strong></td>
+<td><em>boolean</em></td>
+<td><code>true</code></td>
+<td>Pre-select keyboard focused option (set to facade and select if Celesta is closed in any way)</td>
+</tr>
+<tr>
+<td><strong>mouse_hover_preselect</strong></td>
+<td><em>boolean</em></td>
+<td><code>false</code></td>
+<td>Pre-select mouse hovered option (set to facade and select if Celesta is closed in any way)</td>
+</tr>
+<tr>
+<td><strong>mouse_hover_scroll</strong></td>
+<td><em>boolean</em></td>
+<td><code>true</code></td>
+<td>When partially visible option is mouse hovered, scroll to make it fully visible</td>
+</tr>
+<tr>
+<td><strong>fix_ie_mouse_focus</strong></td>
+<td><em>boolean</em></td>
+<td><code>('ActiveX' in window)</code></td>
+<td>Generate custom HTML elements to fix IE mouseclick focus issue: <a href="http://stackoverflow.com/a/25953721">http://stackoverflow.com/a/25953721</a>
+</td>
+</tr>
+<tr>
+<td><strong>ie_tagname_prefix</strong></td>
+<td><em>string</em></td>
+<td><code>'ie-'</code></td>
+<td>HTML element name prefix to fix IE mouseclick issue (see <em>fix_ie_mouse_focus</em>)</td>
+</tr>
+<tr>
+<td><strong>container_tagname</strong></td>
+<td><em>string</em></td>
+<td><code>'span'</code></td>
+<td>HTML element name for overall Celesta container</td>
+</tr>
+<tr>
+<td><strong>container_classname</strong></td>
+<td><em>string</em></td>
+<td><code>'celesta-container'</code></td>
+<td>Main classname for overall Celesta container</td>
+</tr>
+<tr>
+<td><strong>container_classname_open</strong></td>
+<td><em>string</em></td>
+<td><code>'celesta-container-open'</code></td>
+<td>Additional classname for open Celesta container</td>
+</tr>
+<tr>
+<td><strong>container_classname_disabled</strong></td>
+<td><em>string</em></td>
+<td><code>'celesta-container-disabled'</code></td>
+<td>Additional classname for disabled Celesta container</td>
+</tr>
+<tr>
+<td><strong>facade_tagname</strong></td>
+<td><em>string</em></td>
+<td><code>'span'</code></td>
+<td>HTML element name for facade (an element that displays currently selected option)</td>
+</tr>
+<tr>
+<td><strong>facade_classname</strong></td>
+<td><em>string</em></td>
+<td><code>'celesta-facade'</code></td>
+<td>Celesta facade classname</td>
+</tr>
+<tr>
+<td><strong>facadelabel_pseudo</strong></td>
+<td><em>boolean</em></td>
+<td><code>false</code></td>
+<td>Don't generate separate element for facade label (use <code>::before</code>, and if so, facade label cannot inherit selected option classnames)</td>
+</tr>
+<tr>
+<td><strong>facade_attrname_label</strong></td>
+<td><em>string</em></td>
+<td><code>'data-label'</code></td>
+<td>Attribute name to store currently selected option title (if <code>::before</code> is used)</td>
+</tr>
+<tr>
+<td><strong>facadelabel_tagname</strong></td>
+<td><em>string</em></td>
+<td><code>'span'</code></td>
+<td>HTML element name for facade label (if real element is used)</td>
+</tr>
+<tr>
+<td><strong>facadelabel_classname</strong></td>
+<td><em>string</em></td>
+<td><code>'celesta-facadelabel'</code></td>
+<td>Main classname for facade label (if real element is used)</td>
+</tr>
+<tr>
+<td><strong>optlist_tagname</strong></td>
+<td><em>string</em></td>
+<td><code>'div'</code></td>
+<td>HTML element name for options list container</td>
+</tr>
+<tr>
+<td><strong>optlist_classname</strong></td>
+<td><em>string</em></td>
+<td><code>'celesta-optlist'</code></td>
+<td>Main classname for options list container</td>
+</tr>
+<tr>
+<td><strong>optlist_classname_reversed</strong></td>
+<td><em>string</em></td>
+<td><code>'celesta-optlist-reversed'</code></td>
+<td>Additional classname for <em>reversed</em> options list container</td>
+</tr>
+<tr>
+<td><strong>optgroup_tagname</strong></td>
+<td><em>string</em></td>
+<td><code>'div'</code></td>
+<td>HTML element name for options group container (optgroup)</td>
+</tr>
+<tr>
+<td><strong>optgroup_classname</strong></td>
+<td><em>string</em></td>
+<td><code>'celesta-optgroup'</code></td>
+<td>Main classname for options group container (optgroup)</td>
+</tr>
+<tr>
+<td><strong>optgroup_classname_disabled</strong></td>
+<td><em>string</em></td>
+<td><code>'celesta-optgroup-disabled'</code></td>
+<td>Additional classname for <em>disabled</em> optgroup</td>
+</tr>
+<tr>
+<td><strong>optgrouplabel_pseudo</strong></td>
+<td><em>boolean</em></td>
+<td><code>true</code></td>
+<td>Don't generate separate element for optgroup label (use <code>::before</code>)</td>
+</tr>
+<tr>
+<td><strong>optgroup_attrname_label</strong></td>
+<td><em>string</em></td>
+<td><code>'data-label'</code></td>
+<td>Attribute name to store optgroup label (if <code>::before</code> is used)</td>
+</tr>
+<tr>
+<td><strong>optgrouplabel_tagname</strong></td>
+<td><em>string</em></td>
+<td><code>'span'</code></td>
+<td>HTML element name for optgroup label (if real element is used)</td>
+</tr>
+<tr>
+<td><strong>optgrouplabel_classname</strong></td>
+<td><em>string</em></td>
+<td><code>'celesta-optgrouplabel'</code></td>
+<td>Main classname for optgroup label (if real element is used)</td>
+</tr>
+<tr>
+<td><strong>option_tagname</strong></td>
+<td><em>string</em></td>
+<td><code>'span'</code></td>
+<td>HTML element name for option item</td>
+</tr>
+<tr>
+<td><strong>option_classname</strong></td>
+<td><em>string</em></td>
+<td><code>'celesta-option'</code></td>
+<td>Main classname for option item</td>
+</tr>
+<tr>
+<td><strong>option_classname_selected</strong></td>
+<td><em>string</em></td>
+<td><code>'celesta-option-selected'</code></td>
+<td>Additional classname for currently <em>selected</em> option item</td>
+</tr>
+<tr>
+<td><strong>option_classname_hovered</strong></td>
+<td><em>string</em></td>
+<td><code>'celesta-option-hovered'</code></td>
+<td>Additional classname for currently <em>hovered/focused</em> option item</td>
+</tr>
+<tr>
+<td><strong>option_classname_disabled</strong></td>
+<td><em>string</em></td>
+<td><code>'celesta-option-disabled'</code></td>
+<td>Additional classname for <em>disabled</em> option item</td>
+</tr>
+</tbody>
+</table>
+
+<h3>
+<a id="methods-reference" class="anchor" href="#methods-reference" aria-hidden="true"><span class="octicon octicon-link"></span></a>Methods reference</h3>
+
+<p>Here is some method to manipulate your Celesta instances directly (that is, without any user actions).</p>
+
+<p>Examples below assume you have Celesta instance created and named <code>c</code> (why not <code>c</code>?):</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> c <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Celesta</span>(<span class="pl-c1">document</span>.<span class="pl-c1">getElementById</span>(<span class="pl-s"><span class="pl-pds">'</span>my_select<span class="pl-pds">'</span></span>));</pre></div>
+
+<p>Most methods examples below will use this <code>c</code> variable to demonstrate some usage case.</p>
+
+<div class="highlight highlight-source-js"><pre>c.someCoolMethod();</pre></div>
+
+<p>And only <em>static methods</em> examples (there are few) will use <code>Celesta.prototype</code> instead.</p>
+
+<h4>
+<a id="setconfigdefaults" class="anchor" href="#setconfigdefaults" aria-hidden="true"><span class="octicon octicon-link"></span></a>setConfigDefaults</h4>
+
+<p>Static method to override default options for all newly created Celesta instances.
+Accepts an object of options names and values, like the following.</p>
+
+<div class="highlight highlight-source-js"><pre>Celesta.<span class="pl-c1">prototype</span>.setConfigDefaults({
+    space_key_open<span class="pl-k">:</span> <span class="pl-c1">false</span>, 
+    options_navkey_cycling<span class="pl-k">:</span> <span class="pl-c1">true</span>, 
+    closed_options_pagekey_jump_by<span class="pl-k">:</span> <span class="pl-c1">5</span> 
+})</pre></div>
+
+<h4>
+<a id="getconfigparam" class="anchor" href="#getconfigparam" aria-hidden="true"><span class="octicon octicon-link"></span></a>getConfigParam</h4>
+
+<p>Get the value for config param specified.</p>
+
+<div class="highlight highlight-source-js"><pre>c.getConfigParam(<span class="pl-s"><span class="pl-pds">'</span>enter_key_open<span class="pl-pds">'</span></span>); <span class="pl-c">// =&gt; true</span>
+c.getConfigParam(<span class="pl-s"><span class="pl-pds">'</span>typed_life<span class="pl-pds">'</span></span>); <span class="pl-c">// =&gt; 1000</span>
+
+<span class="pl-k">var</span> x <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Celesta</span>(<span class="pl-c1">document</span>.querySelector(<span class="pl-s"><span class="pl-pds">'</span>.another-select<span class="pl-pds">'</span></span>, { typed_life<span class="pl-k">:</span> <span class="pl-c1">1500</span> });
+x.getConfigParam(<span class="pl-s"><span class="pl-pds">'</span>typed_life<span class="pl-pds">'</span></span>); <span class="pl-c">// =&gt; 1500</span></pre></div>
+
+<h4>
+<a id="isinitialized" class="anchor" href="#isinitialized" aria-hidden="true"><span class="octicon octicon-link"></span></a>isInitialized</h4>
+
+<p>Returns <code>true</code> if current instance is successfully initialized, <code>false</code> otherwise.</p>
+
+<div class="highlight highlight-source-js"><pre>c.isInitialized(); <span class="pl-c">// =&gt; true</span></pre></div>
+
+<h4>
+<a id="addeventlistener" class="anchor" href="#addeventlistener" aria-hidden="true"><span class="octicon octicon-link"></span></a>addEventListener</h4>
+
+<p>Attaches a callback that will be fired on certain event.
+For more information of events and callback arguments, see <a href="#events">Events reference</a>. </p>
+
+<div class="highlight highlight-source-js"><pre>c.addEventListener(<span class="pl-s"><span class="pl-pds">'</span>open<span class="pl-pds">'</span></span>, <span class="pl-k">function</span> () { 
+    <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-s"><span class="pl-pds">'</span>bang!<span class="pl-pds">'</span></span>); 
+});
+c.<span class="pl-c1">open</span>(); <span class="pl-c">// 'bang!'</span>
+
+c.<span class="pl-c1">attachEvent</span>(<span class="pl-s"><span class="pl-pds">'</span>change<span class="pl-pds">'</span></span>, <span class="pl-k">function</span> (<span class="pl-smi">new_value</span>, <span class="pl-smi">old_value</span>, <span class="pl-smi">new_text</span>, <span class="pl-smi">old_text</span>, <span class="pl-smi">new_index</span>, <span class="pl-smi">old_index</span>) { 
+    <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-s"><span class="pl-pds">"</span>Changed to option '<span class="pl-pds">"</span></span> <span class="pl-k">+</span> new_value <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span>' which has text '<span class="pl-pds">"</span></span> <span class="pl-k">+</span> new_text <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span>' and index '<span class="pl-pds">"</span></span> <span class="pl-k">+</span> new_index <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span>'.<span class="pl-pds">"</span></span>); 
+});
+c.selectOption(<span class="pl-c1">2</span>); <span class="pl-c">// "Changed to option 'second' which has text 'The second option' and index '2'."</span>
+c.selectOption(<span class="pl-c1">3</span>); <span class="pl-c">// "Changed to option 'third' which has text 'The third option' and index '3'."</span>
+c.selectOption(<span class="pl-c1">3</span>); <span class="pl-c">// (nothing happens, because selected option wasn't changed)</span></pre></div>
+
+<h4>
+<a id="open" class="anchor" href="#open" aria-hidden="true"><span class="octicon octicon-link"></span></a>open</h4>
+
+<p>Turns Celesta to open state (as if it was mouse-clicked).</p>
+
+<div class="highlight highlight-source-js"><pre>c.<span class="pl-c1">open</span>(); <span class="pl-c">// (now you can see it opened)</span></pre></div>
+
+<h4>
+<a id="close" class="anchor" href="#close" aria-hidden="true"><span class="octicon octicon-link"></span></a>close</h4>
+
+<p>Turns Celesta to closed state (as if <kbd>Esc</kbd> was pressed).</p>
+
+<div class="highlight highlight-source-js"><pre>c.<span class="pl-c1">close</span>(); <span class="pl-c">// (now you can see it closed)</span></pre></div>
+
+<h4>
+<a id="toggle" class="anchor" href="#toggle" aria-hidden="true"><span class="octicon octicon-link"></span></a>toggle</h4>
+
+<p>Turns Celesta to closed state (as if <kbd>Esc</kbd> was pressed).</p>
+
+<div class="highlight highlight-source-js"><pre>c.toggle(); <span class="pl-c">// (now you can see it opened)</span>
+c.toggle(); <span class="pl-c">// (now you can see it closed again)</span></pre></div>
+
+<h4>
+<a id="isopen" class="anchor" href="#isopen" aria-hidden="true"><span class="octicon octicon-link"></span></a>isOpen</h4>
+
+<p>Returns <code>true</code> if Celesta is currently in open state, <code>false</code> otherwise.</p>
+
+<div class="highlight highlight-source-js"><pre>c.<span class="pl-c1">open</span>();
+c.isOpen(); <span class="pl-c">// =&gt; true</span>
+c.<span class="pl-c1">close</span>();
+c.isOpen(); <span class="pl-c">// =&gt; false</span>
+c.toggle();
+c.isOpen(); <span class="pl-c">// =&gt; true</span>
+c.toggle();
+c.isOpen(); <span class="pl-c">// =&gt; false</span></pre></div>
+
+<h4>
+<a id="setdisabled" class="anchor" href="#setdisabled" aria-hidden="true"><span class="octicon octicon-link"></span></a>setDisabled</h4>
+
+<p>Set or unsets disabled state for Celesta instance.
+Accepts boolean value (<code>true</code> to disable, <code>false</code> to enable).</p>
+
+<div class="highlight highlight-source-js"><pre>c.setDisabled(<span class="pl-c1">true</span>); <span class="pl-c">// (now you can see it disabled)</span>
+c.setDisabled(<span class="pl-c1">false</span>); <span class="pl-c">// (now you can see it enabled again)</span></pre></div>
+
+<h4>
+<a id="disable" class="anchor" href="#disable" aria-hidden="true"><span class="octicon octicon-link"></span></a>disable</h4>
+
+<p>A shortcut for <code>setDisabled(true)</code>.</p>
+
+<div class="highlight highlight-source-js"><pre>c.disable(); <span class="pl-c">// (now you can see it disabled)</span></pre></div>
+
+<h4>
+<a id="enable" class="anchor" href="#enable" aria-hidden="true"><span class="octicon octicon-link"></span></a>enable</h4>
+
+<p>A shortcut for <code>setDisabled(false)</code>.</p>
+
+<div class="highlight highlight-source-js"><pre>c.enable(); <span class="pl-c">// (now you can see it enabled)</span></pre></div>
+
+<h4>
+<a id="isdisabled" class="anchor" href="#isdisabled" aria-hidden="true"><span class="octicon octicon-link"></span></a>isDisabled</h4>
+
+<p>Returns <code>true</code> if Celesta is currently in open state, <code>false</code> otherwise.</p>
+
+<div class="highlight highlight-source-js"><pre>c.isDisabled(); <span class="pl-c">// =&gt; false</span>
+c.disable();
+c.isDisabled(); <span class="pl-c">// =&gt; true</span>
+c.enable();
+c.isDisabled(); <span class="pl-c">// =&gt; false</span></pre></div>
+
+<h4>
+<a id="selectoption" class="anchor" href="#selectoption" aria-hidden="true"><span class="octicon octicon-link"></span></a>selectOption</h4>
+
+<p>Selects an option by index.</p>
+
+<div class="highlight highlight-source-js"><pre>c.selectOption(<span class="pl-c1">2</span>); <span class="pl-c">// (option with index 2 is now selected)</span></pre></div>
+
+<h4>
+<a id="preselectoption" class="anchor" href="#preselectoption" aria-hidden="true"><span class="octicon octicon-link"></span></a>preselectOption</h4>
+
+<p>Pre-selects an option by index.
+That imitates the behavior of displaying the text for keyboard-focused option in selecbox facade without selecting it.
+Pre-selected option only becomes selected only after selectbox (or Celesta) is closed (even by pressing <kbd>Esc</kbd>).
+Only works on open Celesta instance.</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-c">// assuming we have closed Celesta with option values like 'first', 'second' etc., and 'first' is now selected</span>
+c.getValue(); <span class="pl-c">// =&gt; 'first'</span>
+c.preselectOption(<span class="pl-c1">2</span>); <span class="pl-c">// (nothing happens, because Celesta is closed)</span>
+c.getPreselectedOptionIndex(); <span class="pl-c">// =&gt; undefined</span>
+c.getValue(); <span class="pl-c">// =&gt; 'first'</span>
+c.<span class="pl-c1">open</span>();
+c.preselectOption(<span class="pl-c1">2</span>); <span class="pl-c">// (option with index 2 is now pre-selected)</span>
+c.getPreselectedOptionIndex(); <span class="pl-c">// =&gt; 2</span>
+c.getValue(); <span class="pl-c">// =&gt; 'first' (pre-selected doesn't mean selected!)</span>
+c.<span class="pl-c1">close</span>();
+c.getPreselectedOptionIndex(); <span class="pl-c">// =&gt; undefined (pre-selected option doesn't exist on closed Celesta)</span>
+c.getValue(); <span class="pl-c">// =&gt; 'second' (instead, it became really selected!)</span></pre></div>
+
+<h4>
+<a id="hoveroption" class="anchor" href="#hoveroption" aria-hidden="true"><span class="octicon octicon-link"></span></a>hoverOption</h4>
+
+<p>Hovers (focuses) an option by index.
+Also accepts second param <code>is_mouse</code>, default <code>false</code> (that means "keyboard").
+By default, keyboard-focused items are also pre-selected, but mouse-hovered aren't (that depends on options <code>mouse_hover_preselect</code> and <code>mouse_hover_preselect</code>).
+Only works on open Celesta instance.</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-c">// assuming we have closed Celesta with option values like 'first', 'second' etc., and 'first' is now selected</span>
+c.getValue(); <span class="pl-c">// =&gt; 'first'</span>
+c.hoverOption(<span class="pl-c1">2</span>); <span class="pl-c">// (nothing happens, because Celesta is closed)</span>
+c.<span class="pl-c1">open</span>();
+c.hoverOption(<span class="pl-c1">2</span>); <span class="pl-c">// (option with index 2 is now focused "by keyboard")</span>
+c.getPreselectedOptionIndex(); <span class="pl-c">// =&gt; 2 (by default, keyboard-focused item is also pre-selected)</span>
+c.hoverOption(<span class="pl-c1">3</span>, <span class="pl-c1">true</span>); <span class="pl-c">// (option with index 3 is now hovered "by mouse")</span>
+c.getPreselectedOptionIndex(); <span class="pl-c">// =&gt; 2 (still 2, because by default, mouse-hovered item isn't pre-selected)</span>
+c.hoverOption(<span class="pl-c1">3</span>, <span class="pl-c1">false</span>); <span class="pl-c">// (option with index 3 is now hovered "by keyboard"; actually, that false value isn't needed)</span>
+c.getPreselectedOptionIndex(); <span class="pl-c">// =&gt; 3 (finally, now it is 3)</span></pre></div>
+
+<h4>
+<a id="jumptooption" class="anchor" href="#jumptooption" aria-hidden="true"><span class="octicon octicon-link"></span></a>jumpToOption</h4>
+
+<p>Acts as hoverOption on open Celesta, and as selectOption on closed one.</p>
+
+<div class="highlight highlight-source-js"><pre>c.<span class="pl-c1">open</span>();
+c.jumpToOption(<span class="pl-c1">2</span>); <span class="pl-c">// (option with index 2 is now hovered)</span>
+c.<span class="pl-c1">close</span>();
+c.jumpToOption(<span class="pl-c1">4</span>); <span class="pl-c">// (option with index 4 is now selected)</span></pre></div>
+
+<h4>
+<a id="getselectedoptionvalue" class="anchor" href="#getselectedoptionvalue" aria-hidden="true"><span class="octicon octicon-link"></span></a>getSelectedOptionValue</h4>
+
+<p>Returns the value of currently selected option.</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-c">// assuming you have &lt;option value="second"&gt;The second option&lt;/option&gt;</span>
+c.getSelectedOptionValue(); <span class="pl-c">// =&gt; 'second'</span></pre></div>
+
+<h4>
+<a id="getvalue" class="anchor" href="#getvalue" aria-hidden="true"><span class="octicon octicon-link"></span></a>getValue</h4>
+
+<p>An alias for <a href="#getselectedoptionvalue"><code>getSelectedOptionValue</code></a>.</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-c">// assuming we have &lt;option value="second"&gt;The second option&lt;/option&gt;</span>
+c.getValue(); <span class="pl-c">// =&gt; 'second'</span></pre></div>
+
+<h4>
+<a id="getselectedoptiontext" class="anchor" href="#getselectedoptiontext" aria-hidden="true"><span class="octicon octicon-link"></span></a>getSelectedOptionText</h4>
+
+<p>Returns the text of currently selected option.</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-c">// assuming we have &lt;option value="second"&gt;The second option&lt;/option&gt;</span>
+c.getValue(); <span class="pl-c">// =&gt; 'The second option'</span></pre></div>
+
+<h4>
+<a id="getselectedoptionindex" class="anchor" href="#getselectedoptionindex" aria-hidden="true"><span class="octicon octicon-link"></span></a>getSelectedOptionIndex</h4>
+
+<p>Returns the index of currently selected option.</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-c">// assuming we have Celesta with option values like 'zero', 'first', 'second' etc., and 'zero' is now selected</span>
+c.getSelectedOptionIndex(); <span class="pl-c">// =&gt; 0</span>
+c.getValue(); <span class="pl-c">// =&gt; 'zero'</span>
+c.selectOption(<span class="pl-c1">2</span>);
+c.getSelectedOptionIndex(); <span class="pl-c">// =&gt; 2</span>
+c.getValue(); <span class="pl-c">// =&gt; 'second'</span></pre></div>
+
+<h4>
+<a id="getpreselectedoptionindex" class="anchor" href="#getpreselectedoptionindex" aria-hidden="true"><span class="octicon octicon-link"></span></a>getPreselectedOptionIndex</h4>
+
+<p>Returns the index of currently pre-selected option (<code>undefined</code> if none).</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-c">// assuming we have closed Celesta with option values like 'zero', 'first', 'second' etc., and 'zero' is now selected</span>
+c.<span class="pl-c1">open</span>();
+c.getPreselectedOptionIndex(); <span class="pl-c">// =&gt; undefined (nothing was pre-selected by now)</span>
+c.preselectOption(<span class="pl-c1">2</span>);
+c.getSelectedOptionIndex(); <span class="pl-c">// =&gt; 2</span>
+c.<span class="pl-c1">close</span>();
+c.getSelectedOptionIndex(); <span class="pl-c">// =&gt; undefined (Celesta is closed, no pre-selected option exists)</span></pre></div>
+
+<h4>
+<a id="gethoveredoptionindex" class="anchor" href="#gethoveredoptionindex" aria-hidden="true"><span class="octicon octicon-link"></span></a>getHoveredOptionIndex</h4>
+
+<p>Returns the index of currently hovered (focused) option (<code>undefined</code> if none).</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-c">// assuming we have closed Celesta with option values like 'zero', 'first', 'second' etc., and 'zero' is now selected</span>
+c.getHoveredOptionIndex(); <span class="pl-c">// =&gt; undefined (Celesta is closed, no hovered option exists)</span>
+c.<span class="pl-c1">open</span>();
+c.getHoveredOptionIndex(); <span class="pl-c">// =&gt; 0 (on open, selected option is focused automatically)</span>
+c.hoverOption(<span class="pl-c1">2</span>);
+c.getHoveredOptionIndex(); <span class="pl-c">// =&gt; 2</span>
+c.<span class="pl-c1">close</span>();
+c.getHoveredOptionIndex(); <span class="pl-c">// =&gt; undefined (because Celesta is closed)</span></pre></div>
+
+<h4>
+<a id="arrowup" class="anchor" href="#arrowup" aria-hidden="true"><span class="octicon octicon-link"></span></a>arrowUp</h4>
+
+<p>Act as if ArrowUp (<kbd>↑</kbd>) key is pressed (selects/hovers <em>previous available</em> option).</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-c">// assuming you have months option list with September currently selected</span>
+c.getValue(); <span class="pl-c">// =&gt; 'september'</span>
+c.arrowUp();
+c.getValue(); <span class="pl-c">// =&gt; 'august'</span></pre></div>
+
+<h4>
+<a id="arrowdown" class="anchor" href="#arrowdown" aria-hidden="true"><span class="octicon octicon-link"></span></a>arrowDown</h4>
+
+<p>Act as if ArrowDown (<kbd>↓</kbd>) key is pressed (selects/hovers <em>next available</em> option).</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-c">// assuming you have months option list with September currently selected</span>
+c.getValue(); <span class="pl-c">// =&gt; 'september'</span>
+c.arrowDown();
+c.getValue(); <span class="pl-c">// =&gt; 'october'</span>
+
+<span class="pl-c">// now, assuming you have weekdays list with Wednesday currently selected, and (for some reason) Thursday disabled</span>
+c.getValue(); <span class="pl-c">// =&gt; 'wednesday'</span>
+c.arrowDown(); <span class="pl-c">// (goes down, skips disabled option, so actually goes down once more)</span>
+c.getValue(); <span class="pl-c">// =&gt; 'friday'</span></pre></div>
+
+<h4>
+<a id="pageup" class="anchor" href="#pageup" aria-hidden="true"><span class="octicon octicon-link"></span></a>pageUp</h4>
+
+<p>Acts as if <kbd>PageUp</kbd> key is pressed (skips several options up).
+The jump size differs depending on open state, and relies on values for options <code>closed_options_pagekey_jump_by</code> and <code>open_options_pagekey_jump_by</code>.</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-c">// assuming that Celesta is currently closed, and jumps by 3 items by default</span>
+<span class="pl-c">// also assuming it contains a list of months with September currently selected</span>
+c.getValue(); <span class="pl-c">// =&gt; 'september'</span>
+c.pageUp(); (skips <span class="pl-c1">3</span> items up)
+c.getValue(); <span class="pl-c">// =&gt; 'june'</span></pre></div>
+
+<h4>
+<a id="pagedown" class="anchor" href="#pagedown" aria-hidden="true"><span class="octicon octicon-link"></span></a>pageDown</h4>
+
+<p>Acts as if <kbd>PageDown</kbd> key is pressed (skips several options down).
+The jump size differs depending on open state, and relies on values for options <code>closed_options_pagekey_jump_by</code> and <code>open_options_pagekey_jump_by</code>.</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-c">// assuming that Celesta is currently closed, and jumps by 3 items by default</span>
+<span class="pl-c">// also assuming it contains a list of months with September currently selected</span>
+c.getValue(); <span class="pl-c">// =&gt; 'september'</span>
+c.pageDown(); (skips <span class="pl-c1">3</span> items down)
+c.getValue(); <span class="pl-c">// =&gt; 'december'</span></pre></div>
+
+<h4>
+<a id="appendtyped" class="anchor" href="#appendtyped" aria-hidden="true"><span class="octicon octicon-link"></span></a>appendTyped</h4>
+
+<p>Appends a character to the end quicksearch text (as if it was typed from the keyboard, to find some option).</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-c">// assuming you have an option list that contains weekdays</span>
+c.appendTyped(<span class="pl-s"><span class="pl-pds">'</span>t<span class="pl-pds">'</span></span>); <span class="pl-c">// (quicksearch text is now: 't', 'Tuesday' becomes selected)</span>
+c.appendTyped(<span class="pl-s"><span class="pl-pds">'</span>h<span class="pl-pds">'</span></span>); <span class="pl-c">// (quicksearch text is now: 'th', 'Thursday' becomes selected)</span>
+c.appendTyped(<span class="pl-s"><span class="pl-pds">'</span>w<span class="pl-pds">'</span></span>); <span class="pl-c">// (quicksearch text is now: 'thw', 'Thursday' is still selected because there is no matching item)</span></pre></div>
+
+<h4>
+<a id="resettyped" class="anchor" href="#resettyped" aria-hidden="true"><span class="octicon octicon-link"></span></a>resetTyped</h4>
+
+<p>Clears quicksearch text previously (as if <kbd>Backspace</kbd> was pressed while typing).</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-c">// assuming you have an option list that contains weekdays</span>
+c.appendTyped(<span class="pl-s"><span class="pl-pds">'</span>t<span class="pl-pds">'</span></span>); <span class="pl-c">// (quicksearch text is now: 't', 'Tuesday' becomes selected)</span>
+c.appendTyped(<span class="pl-s"><span class="pl-pds">'</span>h<span class="pl-pds">'</span></span>); <span class="pl-c">// (quicksearch text is now: 'th', 'Thursday' becomes selected)</span>
+c.appendTyped(<span class="pl-s"><span class="pl-pds">'</span>w<span class="pl-pds">'</span></span>); <span class="pl-c">// (quicksearch text is now: 'thw', 'Thursday' is still selected because there is no matching item)</span>
+c.clearTyped(); <span class="pl-c">// (quicksearch text is now empty)</span>
+c.appendTyped(<span class="pl-s"><span class="pl-pds">'</span>w<span class="pl-pds">'</span></span>); <span class="pl-c">// (quicksearch text is now: 'w', 'Wednesday' becomes selected)</span></pre></div>
+
+<h4>
+<a id="getsourceselect" class="anchor" href="#getsourceselect" aria-hidden="true"><span class="octicon octicon-link"></span></a>getSourceSelect</h4>
+
+<p>Returns DOM element for source <code>&lt;select&gt;</code>.</p>
+
+<div class="highlight highlight-source-js"><pre>c.getSourceSelect(); <span class="pl-c">// =&gt; HTMLSelectElement: &lt;select id="my_select"&gt;...&lt;/select&gt;</span></pre></div>
+
+<h4>
+<a id="getcontainer" class="anchor" href="#getcontainer" aria-hidden="true"><span class="octicon octicon-link"></span></a>getContainer</h4>
+
+<p>Returns DOM element for Celesta overall container. 
+May be used to attach some click events etc.</p>
+
+<div class="highlight highlight-source-js"><pre>c.getContainer(); <span class="pl-c">// =&gt; HTMLSpanElement: &lt;span class="celesta-container"&gt;...&lt;/span&gt;</span></pre></div>
+
+<h4>
+<a id="getfacade" class="anchor" href="#getfacade" aria-hidden="true"><span class="octicon octicon-link"></span></a>getFacade</h4>
+
+<p>Returns DOM element for Celesta facade (a block to display currently selected option). 
+May be used to attach some click events etc.</p>
+
+<div class="highlight highlight-source-js"><pre>c.getFacade(); <span class="pl-c">// =&gt; HTMLSpanElement: &lt;span class="celesta-facade"&gt;...&lt;/span&gt;</span></pre></div>
+
+<h4>
+<a id="getoptlist" class="anchor" href="#getoptlist" aria-hidden="true"><span class="octicon octicon-link"></span></a>getOptlist</h4>
+
+<p>Returns DOM element for Celesta options list container.
+May be used to attach some custom scroll library.</p>
+
+<div class="highlight highlight-source-js"><pre>c.getFacade(); <span class="pl-c">// =&gt; HTMLSpanElement: &lt;span class="celesta-facade"&gt;...&lt;/span&gt;</span></pre></div>
+
+<h4>
+<a id="refresh" class="anchor" href="#refresh" aria-hidden="true"><span class="octicon octicon-link"></span></a>refresh</h4>
+
+<p>Rebuilds Celesta DOM structure, based on source <code>&lt;select&gt;</code> structure.
+To be called after external change of source <code>&lt;select&gt;</code>.</p>
+
+<div class="highlight highlight-text-html-basic"><pre>// assuming we have the following HTML markup:
+&lt;<span class="pl-ent">select</span> <span class="pl-e">id</span>=<span class="pl-s"><span class="pl-pds">"</span>the_select<span class="pl-pds">"</span></span>&gt;
+    &lt;<span class="pl-ent">option</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>milk<span class="pl-pds">"</span></span>&gt;Milk&lt;/<span class="pl-ent">option</span>&gt;
+    &lt;<span class="pl-ent">option</span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>honey<span class="pl-pds">"</span></span>&gt;Honey&lt;/<span class="pl-ent">option</span>&gt;
+&lt;/<span class="pl-ent">select</span>&gt;</pre></div>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> source <span class="pl-k">=</span> <span class="pl-c1">document</span>.<span class="pl-c1">getElementById</span>(<span class="pl-s"><span class="pl-pds">'</span>the_select<span class="pl-pds">'</span></span>);
+<span class="pl-k">var</span> celesta <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Celesta</span>(source); <span class="pl-c">// (contains 'Milk' and 'Honey' items with indexes 0 and 1)</span>
+celesta.selectOption(<span class="pl-c1">1</span>); <span class="pl-c">// (selecting 'Honey')</span>
+celesta.getSelectedOptionIndex(); <span class="pl-c">// =&gt; 1</span>
+
+<span class="pl-c">// now, adding another option (using jQuery syntax to make more readable)</span>
+$(source.<span class="pl-c1">options</span>[<span class="pl-c1">0</span>]).insertAfter(<span class="pl-s"><span class="pl-pds">'</span>&lt;option value="toast"&gt;Toast&lt;/option&gt;<span class="pl-pds">'</span></span>); <span class="pl-c">// source select now has 'Milk' and 'Toast' and 'Honey'</span>
+
+<span class="pl-c">// but linked Celesta doesn't know anything about this change, so it cannot even selected third item (which has index 2)</span>
+celesta.selectOption(<span class="pl-c1">2</span>); <span class="pl-c">// trying to select last item</span>
+celesta.getSelectedOption(); <span class="pl-c">// =&gt; 1 (nothing changed, because 2 is out of options range remembered by Celesta)</span>
+
+<span class="pl-c">// so we need to make a refresh</span>
+celesta.refresh();
+celesta.selectOption(<span class="pl-c1">2</span>); <span class="pl-c">// trying to select last item, again</span>
+celesta.getSelectedOption(); <span class="pl-c">// =&gt; 2 (finally, we got it!)</span></pre></div>
+
+<h4>
+<a id="update" class="anchor" href="#update" aria-hidden="true"><span class="octicon octicon-link"></span></a>update</h4>
+
+<p>Just an alias for <code>refresh</code>.</p>
+
+<div class="highlight highlight-source-js"><pre>c.update();</pre></div>
+
+<h4>
+<a id="destroy" class="anchor" href="#destroy" aria-hidden="true"><span class="octicon octicon-link"></span></a>destroy</h4>
+
+<p>Destroy any DOM structure and handlers created by Celesta instance.
+Restores source select to be visible and selectable.</p>
+
+<div class="highlight highlight-source-js"><pre>c.selectOption(<span class="pl-c1">2</span>); <span class="pl-c">// (that also affects source select)</span>
+c.destroy(); (restores source select, <span class="pl-k">with</span> index <span class="pl-c1">2</span> selected)</pre></div>
+
+<h3>
+<a id="events-reference" class="anchor" href="#events-reference" aria-hidden="true"><span class="octicon octicon-link"></span></a>Events reference</h3>
+
+<p>Celesta can call your own callback when some events happen. Event handlers can be added with <a href="#addeventlistener"><code>addEventListener</code></a> method.
+Celesta also passes arguments to callbacks of some events. Here is the generic example:</p>
+
+<div class="highlight highlight-source-js"><pre>c.addEventListener(<span class="pl-s"><span class="pl-pds">'</span>eventname<span class="pl-pds">'</span></span>, <span class="pl-k">function</span> (<span class="pl-smi">arg1</span>, <span class="pl-smi">arg2</span>, <span class="pl-smi">arg3</span>) {
+    <span class="pl-c">// (do stuff)</span>
+});</pre></div>
+
+<p>A more specific example can be found <a href="#addeventlistener">here</a>.</p>
+
+<p>Here is the reference for event and arguments passed to callbacks.</p>
+
+<table>
+<thead>
+<tr>
+<th>Event</th>
+<th>Callback arguments</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>focus</strong></td>
+<td><em>(none)</em></td>
+<td>Celesta DOM element obtains focus</td>
+</tr>
+<tr>
+<td><strong>blur</strong></td>
+<td><em>(none)</em></td>
+<td>Celesta DOM element loses focus</td>
+</tr>
+<tr>
+<td><strong>refresh</strong></td>
+<td><em>(none)</em></td>
+<td>Celesta instance is <a href="#refresh">refreshed</a>, based on source <code>&lt;select&gt;</code>
+</td>
+</tr>
+<tr>
+<td><strong>close</strong></td>
+<td><em>(none)</em></td>
+<td>Celesta instance is closed (by user action or <a href="#close">API function</a>)</td>
+</tr>
+<tr>
+<td><strong>open</strong></td>
+<td><em>(none)</em></td>
+<td>Celesta instance is opened (by user action or <a href="#open">API function</a>)</td>
+</tr>
+<tr>
+<td><strong>destroy</strong></td>
+<td><em>(none)</em></td>
+<td>Celesta instance is <a href="#destroy">destroyed</a>
+</td>
+</tr>
+<tr>
+<td><strong>change</strong></td>
+<td>
+<em>{string}</em> <code>new_value</code>, <em>{string|undefined}</em> <code>old_value</code>, <em>{string}</em> <code>new_text</code>, <em>{string}</em> <code>old_text</code>, <em>{number}</em> <code>new_index</code>, <em>{number|undefined}</em> <code>old_index</code>
+</td>
+<td>Option is selected (by user action or <a href="#selectOption">API function</a>); same as <code>optionselect</code>, but has another arguments order</td>
+</tr>
+<tr>
+<td><strong>optionselect</strong></td>
+<td>
+<em>{number}</em> <code>new_index</code>, <em>{number|undefined}</em> <code>old_index</code>, <em>{string}</em> <code>new_value</code>, <em>{string|undefined}</em> <code>old_value</code>, <em>{string}</em> <code>new_text</code>, <em>{string}</em> <code>old_text</code>
+</td>
+<td>Option is selected (by user action or <a href="#selectOption">API function</a>)</td>
+</tr>
+<tr>
+<td><strong>optionpreselect</strong></td>
+<td>
+<em>{number}</em> <code>new_index</code>, <em>{number|undefined}</em> <code>old_index</code>, <em>{string}</em> <code>new_value</code>, <em>{string|undefined}</em> <code>old_value</code>, <em>{string}</em> <code>new_text</code>, <em>{string}</em> <code>old_text</code>
+</td>
+<td>Celesta option is pre-selected (by user action or <a href="#preselectOption">API function</a>)</td>
+</tr>
+<tr>
+<td><strong>optionhover</strong></td>
+<td>
+<em>{number}</em> <code>new_index</code>, <em>{number|undefined}</em> <code>old_index</code>, <em>{string}</em> <code>new_value</code>, <em>{string|undefined}</em> <code>old_value</code>, <em>{string}</em> <code>new_text</code>, <em>{string}</em> <code>old_text</code>
+</td>
+<td>Celesta option is hovered/focused (by user action or <a href="#hoverOption">API function</a>)</td>
+</tr>
+</tbody>
+</table>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Celesta maintained by <a href="https://github.com/thybzi">thybzi</a></p>
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
