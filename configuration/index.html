@@ -1,0 +1,72 @@
+---
+title: Configuration
+---
+
+<h1>{{ page.title }}</h1>
+
+<p>Configuration params are some options that customize Celesta functioning and UX.</p>
+<p>(I'd use the word <em>options</em>, but it has ambiguous meaning when speaking around <code>&lt;select&gt</code> matters :)</p>
+
+<p>Any configuration param can be set when initializing new Celesta object, and cannot be changed for the instance already created.</p>
+{% highlight javascript %}
+new Celesta(document.getElementById('my_select'), {
+    space_key_open: false,
+    options_nav_cycling: true,
+    closed_options_pagekey_jump_by: 5
+});
+{% endhighlight %}
+
+<p>You can also override configuration defaults with
+    <code><a href="{{ site.baseurl }}/methods/#setConfigDefaults">setConfigDefaults</a></code>.
+    That will affect all newly created Celesta instances.</p>
+{% highlight javascript %}
+Celesta.prototype.setConfigDefaults({
+    space_key_open: false,
+    options_nav_cycling: true,
+    closed_options_pagekey_jump_by: 5
+});
+{% endhighlight %}
+
+<p>Here is the reference for all those configuration parameters.</p>
+
+<table>
+    <thead>
+    <tr>
+        <th>Parameter</th>
+        <th>Accepted value</th>
+        <th>Default value</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% assign params = site.params | sort:"order" %}
+    {% for param in params %}
+    <tr>
+        <td><strong>{{ param.path | split:"/" | last | split:"." | first }}</strong></td>
+        <td>{% capture accepted_output %}
+            {% for value in param.accepted %}
+                {% if value[1] %}
+                    <code>{{ value[0] }}</code>
+                {% else %}
+                    <em>&#123;{% if value[0] %}{{ value[0] }}{% else %}{{ value }}{% endif %}&#125;</em>
+                {% endif %}
+                {% unless forloop.last %}&nbsp;|&nbsp;{% endunless %}
+            {% endfor %}
+        {% endcapture %}{{ accepted_output | replace:" ","" | strip_newlines }}</td>
+        <td><code>{{ param.default }}</code></td>
+        <td>{{ param.content }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<h2><a id="object-list" class="anchor" href="#object-list" aria-hidden="true"><span class="octicon octicon-link"></span>Full list as JavaScript object</a></h2>
+
+{% highlight javascript %}
+{
+{% for param in params %}{% capture param_output %}
+    {{ param.path | split:"/" | last | split:"." | first }}: {{ param.default }}
+{% endcapture %}{{ param_output | strip_newlines }}{% unless forloop.last %},
+{% endunless %}{% endfor %}
+}
+{% endhighlight %}

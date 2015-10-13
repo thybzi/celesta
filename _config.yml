@@ -1,3 +1,9 @@
+collections:
+  - params
+  - methods
+  - events
+  - releases
+
 defaults:
   -
     scope:

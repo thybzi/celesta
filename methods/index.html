@@ -1,0 +1,44 @@
+---
+title: Methods reference
+---
+
+<h1>{{ page.title }}</h1>
+
+<p>Here is some methods to manipulate your Celesta instances directly (that is, without any user actions).</p>
+
+<p>Examples below assume you have Celesta instance created and named <code>c</code> (why not <code>c</code>?):</p>
+
+<!--<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> c <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Celesta</span>(<span class="pl-c1">document</span>.<span class="pl-c1">getElementById</span>(<span class="pl-s"><span class="pl-pds">'</span>my_select<span class="pl-pds">'</span></span>));</pre></div>-->
+{% highlight javascript %}
+var c = new Celesta(document.getElementById('my_select'));
+{% endhighlight %}
+
+<p>Most methods examples below will use this <code>c</code> variable to demonstrate some usage case.</p>
+
+<!--<div class="highlight highlight-source-js"><pre>c.someCoolMethod();</pre></div>-->
+{% highlight javascript %}
+c.someCoolMethod();
+{% endhighlight %}
+
+<p>And only <em>static methods</em> examples (there are few) will use <code>Celesta.prototype</code> instead.</p>
+
+{% assign methods = site.methods | sort:"order" %}
+{% for method in methods %}
+    {% assign method_name = method.path | split:"/" | last | split:"." | first %}
+<h2><a id="{{ method_name }}" class="anchor" href="#{{ method_name }}" aria-hidden="true"><span class="octicon octicon-link"></span>{{ method_name }}</a></h2>
+    {% if method.args%}
+<p>
+    <strong>Arguments:</strong>
+    {% for arg in method.args %}
+    <em>&#123;{{ arg[1] }}&#125;</em>&nbsp;<code>{{ arg[0] }}</code>{% unless forloop.last %}, {% endunless %}
+    {% endfor %}
+</p>
+    {% endif %}
+    {% if method.ret%}
+<p>
+    <strong>Returns:</strong>
+    <em>&#123;{{ method.ret }}&#125;</em>
+</p>
+    {% endif %}
+    {{ method.content }}
+{% endfor %}

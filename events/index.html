@@ -1,0 +1,49 @@
+---
+title: Events reference
+---
+
+<h1>{{ page.title }}</h1>
+
+<p>Celesta can call your own callback when some events happen. Event handlers can be added with <code><a href="{{ site.baseurl }}/methods/#addEventListener">addEventListener</a></code> method.</p>
+<p>Celesta also passes arguments to callbacks of some events. Here is the generic example:</p>
+
+<!--<div class="highlight highlight-source-js"><pre>c.addEventListener(<span class="pl-s"><span class="pl-pds">'</span>eventname<span class="pl-pds">'</span></span>, <span class="pl-k">function</span> (<span class="pl-smi">arg1</span>, <span class="pl-smi">arg2</span>, <span class="pl-smi">arg3</span>) {
+    <span class="pl-c">// (do stuff)</span>
+});</pre></div>-->
+
+{% highlight javascript %}
+c.addEventListener('eventname', function (arg1, arg2, arg3) {
+    // (do stuff)
+});
+{% endhighlight %}
+
+<p>A more specific example can be found <a href="{{ site.baseurl }}/methods/#addEventListener">here</a>.</p>
+
+<p>Here is the reference for event and arguments passed to callbacks.</p>
+
+<table>
+    <thead>
+    <tr>
+        <th>Event</th>
+        <th>Callback arguments</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% assign events = site.events | sort:"order" %}
+    {% for event in events %}
+    <tr>
+        <td><strong>{{ event.path | split:"/" | last | split:"." | first }}</strong></td>
+        <td>
+            {% unless event.args %}
+            <em>(none)</em>
+            {% endunless %}
+            {% for arg in event.args %}
+            <em>&#123;{{ arg[1] }}&#125;</em>&nbsp;<code>{{ arg[0] }}</code>{% unless forloop.last %}, {% endunless %}
+            {% endfor %}
+        </td>
+        <td>{{ event.content }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
