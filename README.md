@@ -29,7 +29,7 @@ Or, a little more advanced example:
 var selectbox = document.querySelector('.some-select');
 var celesta = new Celesta(selectbox, {
     space_key_open: false,
-    options_navkey_cycling: true,
+    options_nav_cycling: true,
     closed_options_pagekey_jump_by: 5
 });
 
@@ -188,7 +188,7 @@ Accepts an object of options names and values, like the following.
 ```javascript
 Celesta.prototype.setConfigDefaults({
     space_key_open: false, 
-    options_navkey_cycling: true, 
+    options_nav_cycling: true, 
     closed_options_pagekey_jump_by: 5 
 })
 ```
@@ -218,7 +218,7 @@ c.addEventListener('open', function () {
 });
 c.open(); // 'bang!'
 
-c.attachEvent('change', function (new_value, old_value, new_text, old_text, new_index, old_index) { 
+c.addEventListener('change', function (new_value, old_value, new_text, old_text, new_index, old_index) { 
     console.log("Changed to option '" + new_value + "' which has text '" + new_text + "' and index '" + new_index + "'."); 
 });
 c.selectOption(2); // "Changed to option 'second' which has text 'The second option' and index '2'."
