@@ -59,7 +59,7 @@
      * @property {?number|boolean} [closed_options_pagekey_jump_by]
      * @property {?number|boolean} [open_options_pagekey_jump_by]
      * @property {boolean} [options_type_cycling]
-     * @property {boolean} [options_navkey_cycling]
+     * @property {boolean} [options_nav_cycling]
      * @property {boolean} [keyboard_hover_preselect]
      * @property {boolean} [mouse_hover_preselect]
      * @property {boolean} [mouse_hover_scroll]

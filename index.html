@@ -37,7 +37,7 @@
 <div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> selectbox <span class="pl-k">=</span> <span class="pl-c1">document</span>.querySelector(<span class="pl-s"><span class="pl-pds">'</span>.some-select<span class="pl-pds">'</span></span>);
 <span class="pl-k">var</span> celesta <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Celesta</span>(selectbox, {
     space_key_open<span class="pl-k">:</span> <span class="pl-c1">false</span>,
-    options_navkey_cycling<span class="pl-k">:</span> <span class="pl-c1">true</span>,
+    options_nav_cycling<span class="pl-k">:</span> <span class="pl-c1">true</span>,
     closed_options_pagekey_jump_by<span class="pl-k">:</span> <span class="pl-c1">5</span>
 });
 
@@ -521,7 +521,7 @@ Accepts an object of options names and values, like the following.</p>
 
 <div class="highlight highlight-source-js"><pre>Celesta.<span class="pl-c1">prototype</span>.setConfigDefaults({
     space_key_open<span class="pl-k">:</span> <span class="pl-c1">false</span>, 
-    options_navkey_cycling<span class="pl-k">:</span> <span class="pl-c1">true</span>, 
+    options_nav_cycling<span class="pl-k">:</span> <span class="pl-c1">true</span>,
     closed_options_pagekey_jump_by<span class="pl-k">:</span> <span class="pl-c1">5</span> 
 })</pre></div>
 
@@ -554,7 +554,7 @@ For more information of events and callback arguments, see <a href="#events">Eve
 });
 c.<span class="pl-c1">open</span>(); <span class="pl-c">// 'bang!'</span>
 
-c.<span class="pl-c1">attachEvent</span>(<span class="pl-s"><span class="pl-pds">'</span>change<span class="pl-pds">'</span></span>, <span class="pl-k">function</span> (<span class="pl-smi">new_value</span>, <span class="pl-smi">old_value</span>, <span class="pl-smi">new_text</span>, <span class="pl-smi">old_text</span>, <span class="pl-smi">new_index</span>, <span class="pl-smi">old_index</span>) { 
+c.addEventListener(<span class="pl-s"><span class="pl-pds">'</span>change<span class="pl-pds">'</span></span>, <span class="pl-k">function</span> (<span class="pl-smi">new_value</span>, <span class="pl-smi">old_value</span>, <span class="pl-smi">new_text</span>, <span class="pl-smi">old_text</span>, <span class="pl-smi">new_index</span>, <span class="pl-smi">old_index</span>) {
     <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-s"><span class="pl-pds">"</span>Changed to option '<span class="pl-pds">"</span></span> <span class="pl-k">+</span> new_value <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span>' which has text '<span class="pl-pds">"</span></span> <span class="pl-k">+</span> new_text <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span>' and index '<span class="pl-pds">"</span></span> <span class="pl-k">+</span> new_index <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span>'.<span class="pl-pds">"</span></span>); 
 });
 c.selectOption(<span class="pl-c1">2</span>); <span class="pl-c">// "Changed to option 'second' which has text 'The second option' and index '2'."</span>
