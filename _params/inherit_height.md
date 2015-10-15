@@ -1,6 +1,6 @@
 ---
 order: 40
 accepted: boolean
-default: true
+default: false
 ---
 Inherit source select height
