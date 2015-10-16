@@ -54,7 +54,7 @@ Celesta.prototype.setConfigDefaults({
             {% endfor %}
         {% endcapture %}{{ accepted_output | replace:" ","" | strip_newlines }}</td>
         <td><code>{{ param.default }}</code></td>
-        <td>{{ param.content }}</td>
+        <td>{{ param.content | replace:"<p>","" | replace:"</p>","" }}</td>
     </tr>
     {% endfor %}
     </tbody>
