@@ -1,7 +1,5 @@
 ---
 order: 280
-args: 
-  new_char: string
 ---
 Clears quicksearch text previously (as if Backspace was pressed while typing).
 {% highlight javascript %}
