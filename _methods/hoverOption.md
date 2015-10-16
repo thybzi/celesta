@@ -4,7 +4,14 @@ args:
   index: number
   is_mouse: boolean=false
 ---
-Hovers (focuses) an option by index. Also accepts second param `is_mouse`, default `false` (that means "keyboard"). By default, keyboard-focused items are also pre-selected, but mouse-hovered aren't (that depends on options `mouse_hover_preselect` and `mouse_hover_preselect`). Only works on open Celesta instance.
+Hovers (focuses) an option by index.
+
+Accepts optional second param `is_mouse`, default `false` (which means "keyboard").
+By default, keyboard-focused items are also [pre-selected](#preselectOption), but mouse-hovered aren't
+(that depends on `keyboard_hover_preselect` and `mouse_hover_preselect` config params).
+
+Only works on [open](#open) Celesta instance.
+
 {% highlight javascript %}
 // assuming we have closed Celesta with option values like 'first', 'second' etc., and 'first' is now selected
 c.getValue(); // => 'first'

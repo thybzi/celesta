@@ -2,13 +2,16 @@
 order: 330
 ---
 Rebuilds Celesta DOM structure, based on source `<select>` structure. To be called after external change of source `<select>`.
+
+Assuming we have the following HTML markup:
 {% highlight html %}
-// assuming we have the following HTML markup:
 <select id="the_select">
     <option value="milk">Milk</option>
     <option value="honey">Honey</option>
 </select>
 {% endhighlight %}
+
+Now, let's play:
 {% highlight javascript %}
 var source = document.getElementById('the_select');
 var celesta = new Celesta(source); // (contains 'Milk' and 'Honey' items with indexes 0 and 1)

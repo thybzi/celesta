@@ -1,7 +1,7 @@
 ---
 order: 340
 ---
-Just an alias for `refresh`.
+Just an alias for [refresh](#refresh).
 {% highlight javascript %}
 c.update();
 {% endhighlight %}

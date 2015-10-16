@@ -12,7 +12,7 @@ c.addEventListener('open', function () {
 });
 c.open(); // 'bang!'
 
-c.attachEvent('change', function (new_value, old_value, new_text, old_text, new_index, old_index) {
+c.addEventListener('change', function (new_value, old_value, new_text, old_text, new_index, old_index) {
     console.log("Changed to option '" + new_value + "' which has text '" + new_text + "' and index '" + new_index + "'."); 
 });
 c.selectOption(2); // "Changed to option 'second' which has text 'The second option' and index '2'."
