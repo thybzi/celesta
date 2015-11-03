@@ -129,14 +129,14 @@
 .celesta-container .celesta-option.celesta-option-selected {
   color: #cc0000;
 }
-.celesta-container .celesta-option.celesta-option-hovered {
-  background-color: #ddddff;
-}
 .celesta-container .celesta-option.celesta-option-disabled {
   background-color: inherit;
   color: inherit;
   opacity: 0.5;
   cursor: default;
+}
+.celesta-container .celesta-option.celesta-option-hovered {
+  background-color: #ddddff;
 }
 .celesta-container.celesta-container-open .celesta-facade {
   -webkit-border-radius: 3px 3px 0 0;

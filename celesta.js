@@ -367,7 +367,7 @@
         }
 
         this._container.classList.add(this._getClassname('container', 'open'));
-        this.hoverOption(this._selected_option_index);
+        this.hoverOption(this._selected_option_index, false, true);
 
         if (this._config.optlist_smart_reverse) {
             this._optlistSmartReverse();
@@ -536,8 +536,9 @@
      * Works only on open Celesta
      * @param {number} index Index of option to hover
      * @param {boolean=false} [is_mouse] Indicates whether event comes from mouse or keyboard action
+     * @param {boolean=false} [force] Hover option even if it is disabled
      */
-    Celesta.prototype.hoverOption = function (index, is_mouse) {
+    Celesta.prototype.hoverOption = function (index, is_mouse, force) {
         var old_index = this._hovered_option_index,
             classname,
             old_element,
@@ -550,7 +551,7 @@
             optlist_top,
             optlist_bottom;
 
-        if (!this._is_open || (index === old_index) || !this._isSelectableOption(index)) {
+        if (!this._is_open || (index === old_index) || !(force || this._isSelectableOption(index))) {
             return;
         }
 
