@@ -221,6 +221,136 @@
         celesta.arrowUp();
         assert.strictEqual(celesta.getHoveredOptionIndex(), 0, 'went up changing hovered option: #1 => #0');
     });
+    QUnit.test('Pages up and down @ closed optlist, mixed options, cross-optgroup', function (assert) {
+        wrapper.innerHTML = M_SELECT_COMPLEX_MIXED;
+        var celesta = new Celesta(wrapper.firstElementChild);
+
+        // Initially, option #0 ("One Republic") is selected (tested in 'Initial selected option index' module)
+        // Assuming to have default Celesta page jump size of 3 items @todo check config value?
+
+        // Go down to option #3 ("Four Seasons")
+        celesta.pageDown();
+        assert.strictEqual(celesta.getSelectedOptionIndex(), 3, 'went down changing selected option: #0 => #3');
+
+        // Go up, back to option #0 ("One Republic")
+        celesta.pageUp();
+        assert.strictEqual(celesta.getSelectedOptionIndex(), 0, 'went up changing selected option: #3 => #0');
+
+        // Try to go up from the first option - nothing should happen
+        celesta.pageUp();
+        assert.strictEqual(celesta.getSelectedOptionIndex(), 0, 'tried to go up, kept selected option: #0 => #0');
+
+        // Change position to #1 ("Two Steps From Hell") (tested in 'Option select' module)
+        celesta.selectOption(1);
+
+        // Go down to option #4 ("Five Nights At Freddy's") - skipping optgroup label
+        celesta.pageDown();
+        assert.strictEqual(celesta.getSelectedOptionIndex(), 4, 'went down changing selected option: #1 => #4');
+
+        // Go up to option #2 ("Three Days Grace") - passing optgroup label
+        celesta.pageUp();
+        assert.strictEqual(celesta.getSelectedOptionIndex(), 2, 'went up changing selected option: #4 => #2');
+
+        // Go down, back to option #4 ("Five Nights At Freddy's") - passing optgroup label
+        celesta.pageDown();
+        assert.strictEqual(celesta.getSelectedOptionIndex(), 4, 'went down changing selected option: #2 => #4');
+
+        // Change position to #3 ("Four Seasons") (tested in 'Option select' module)
+        celesta.selectOption(3);
+
+        // Go down to option #6 ("Seven Nations Army") - skipping optgroup label and disabled option
+        celesta.pageDown();
+        assert.strictEqual(celesta.getSelectedOptionIndex(), 6, 'went down changing selected option: #3 => #6');
+
+        // Change position to #4 ("Five Nights At Freddy's") (tested in 'Option select' module)
+        celesta.selectOption(4);
+
+        // Go down to option #6 ("Seven Nations Army") - passing optgroup label and disabled option
+        celesta.pageDown();
+        assert.strictEqual(celesta.getSelectedOptionIndex(), 6, 'went down changing selected option: #4 => #6');
+
+        // Change position to #8 ("Nine Inch Nails") (tested in 'Option select' module)
+        celesta.selectOption(8);
+
+        // Go down to option #13 ("Fourteen Actors Playing") - skipping disabled optgroup label and options
+        celesta.pageDown();
+        assert.strictEqual(celesta.getSelectedOptionIndex(), 13, 'went down changing selected option: #8 => #13');
+
+        // Go up to option #10 ("Eleven Madison Park") - passing disabled optgroup options and skipping its label
+        celesta.pageUp();
+        assert.strictEqual(celesta.getSelectedOptionIndex(), 10, 'went up changing selected option: #13 => #10');
+
+        // Go down, back to option #13 ("Fourteen Actors Acting") - passing disabled optgroup label & 1st option, skipping 2nd option
+        celesta.pageDown();
+        assert.strictEqual(celesta.getSelectedOptionIndex(), 13, 'went down changing selected option: #10 => #13');
+
+        // Change position to #14 ("Fifteen Tailor Swift") (tested in 'Option select' module)
+        celesta.selectOption(14);
+
+        // Go down to option #17 ("Eighteen Visions")
+        celesta.pageDown();
+        assert.strictEqual(celesta.getSelectedOptionIndex(), 17, 'went down changing selected option: #14 => #17');
+
+        // Change position to #15 ("Sixteen Saltlines") (tested in 'Option select' module)
+        celesta.selectOption(15);
+
+        // Go down to option #17 ("Eighteen Visions") - stepping back to last known enabled option
+        celesta.pageDown();
+        assert.strictEqual(celesta.getSelectedOptionIndex(), 17, 'went down changing selected option: #15 => #17');
+
+        // Try to go down from the last enabled option - nothing should happen
+        celesta.pageDown();
+        assert.strictEqual(celesta.getSelectedOptionIndex(), 17, 'tried to go up, kept selected option: #17 => #17');
+
+    });
+    QUnit.test('Pages up and down @ open optlist, mixed options, cross-optgroup', function (assert) {
+        wrapper.innerHTML = M_SELECT_COMPLEX;
+        var celesta = new Celesta(wrapper.firstElementChild);
+
+        // Initially, option #0 ("One Republic") is selected (tested in 'Initial selected option index' module)
+
+        celesta.open();
+
+        // Go down to option #11 ("Twelve South")
+        celesta.pageDown();
+        assert.strictEqual(celesta.getHoveredOptionIndex(), 11, 'went down changing hovered option: #0 => #11');
+
+        // Go down to option #24 ("Joe Satriani") - skipping optgroup labels and disabled options
+        celesta.pageDown();
+        assert.strictEqual(celesta.getHoveredOptionIndex(), 24, 'went down changing hovered option: #11 => #24');
+
+        // Go up to option #15 ("Sixteen Saltlines") - skipping optgroup labels and disabled options
+        celesta.pageUp();
+        assert.strictEqual(celesta.getHoveredOptionIndex(), 15, 'went up changing hovered option: #24 => #15');
+
+        // Go down, back to option #24 ("Joe Satriani") - skipping optgroup labels and disabled options
+        celesta.pageDown();
+        assert.strictEqual(celesta.getHoveredOptionIndex(), 24, 'went down changing hovered option: #15 => #24');
+
+        // Go down to option #35 ("Les Paul")
+        celesta.pageDown();
+        assert.strictEqual(celesta.getHoveredOptionIndex(), 35, 'went down changing hovered option: #24 => #35');
+
+        // Go down to option #44 ("Бабушка (granny)") - skipping optgroup labels and disabled options
+        celesta.pageDown();
+        assert.strictEqual(celesta.getHoveredOptionIndex(), 44, 'went down changing hovered option: #35 => #44');
+
+        // Go down to option #48 ("Одеяло (blanket)") - the end of list reached
+        celesta.pageDown();
+        assert.strictEqual(celesta.getHoveredOptionIndex(), 48, 'went down changing hovered option: #44 => #48');
+
+        // Go up to option #39 (".tr (Turkey)") - skipping optgroup labels and disabled options
+        celesta.pageUp();
+        assert.strictEqual(celesta.getHoveredOptionIndex(), 39, 'went up changing hovered option: #48 => #39');
+
+        // Go down, back to option #48 ("Одеяло (blanket)")
+        celesta.pageDown();
+        assert.strictEqual(celesta.getHoveredOptionIndex(), 48, 'went down changing hovered option: #39 => #48');
+
+        // Stay at option #43 ("Одеяло (blanket)") - the end of list reached
+        celesta.pageDown();
+        assert.strictEqual(celesta.getHoveredOptionIndex(), 48, 'went down keeping hovered option: #48');
+    });
 
 </script>
 </body>

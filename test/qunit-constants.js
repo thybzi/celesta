@@ -147,3 +147,37 @@ var M_SELECT_COMPLEX =
     '        <option value="odeyalo">Одеяло (blanket)</option>' +
     '    </optgroup>' +
     '</select>';
+
+var M_SELECT_COMPLEX_MIXED =
+    '<select>' +
+    '    <option value="1">One Republic</option>' +
+    '    <option value="2">Two Steps From Hell</option>' +
+    '    <option value="3">Three Days Grace</option>' +
+    '    <option value="4">Four Seasons</option>' +
+    '    <optgroup label="Group A">' +
+    '        <option value="5">Five Nights At Freddy\'s</option>' +
+    '        <option value="6" disabled>Six Feet Under</option>' +
+    '    </optgroup>' +
+    '    <optgroup label="Group B">' +
+    '        <option value="7">Seven Nation Army</option>' +
+    '        <option value="8" disabled>Eight Below</option>' +
+    '        <option value="9">Nine Inch Nails</option>' +
+    '        <option value="10">Ten O\'Clock Postman</option>' +
+    '    </optgroup>' +
+    '    <option value="11">Eleven Madison Park</option>' +
+    '    <optgroup label="Group C" disabled>' +
+    '        <option value="12">Twelve South</option>' +
+    '        <option value="13">Thirteen Reasons Why</option>' +
+    '    </optgroup>' +
+    '    <option value="14">Fourteen Actors Acting</option>' +
+    '    <optgroup label="Group D">' +
+    '        <option value="15">Fifteen Taylor Swift</option>' +
+    '        <option value="16">Sixteen Saltlines</option>' +
+    '        <option value="17">Seventeen</option>' +
+    '    </optgroup>' +
+    '    <optgroup label="Group E">' +
+    '        <option value="18">Eighteen Visions</option>' +
+    '        <option value="19" disabled>Nineteen Hundred And Eighty Five</option>' +
+    '        <option value="20" disabled>Twenty Dollars In My Pocket</option>' +
+    '    </optgroup>' +
+    '</select>';
