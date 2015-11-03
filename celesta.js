@@ -2026,6 +2026,16 @@
     }
 
     /**
+     * Indicates whether value passed is array
+     * @param {*} value
+     * @returns {boolean}
+     * @private
+     */
+    function _isArray (value) {
+        return value && (typeof value === 'object') && (value instanceof Array);
+    }
+
+    /**
      * Indicates whether value passed is function
      * @param {*} value
      * @returns {boolean}
