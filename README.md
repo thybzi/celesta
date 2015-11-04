@@ -105,3 +105,7 @@ API methods, option names, event callback interface, CSS classnames etc. can be 
 
 * Significant UI/UX change compared to native selectbox (if you want something "fancier", try [Chosen](https://harvesthq.github.io/chosen/) or things like that)
 
+
+### Version history ###
+
+* **0.1.0** *(2015-10-12)*: Initial release
