@@ -493,9 +493,7 @@
      * @param {boolean=false} [force] Select option even if it is disabled or already selected, or select is disabled
      */
     Celesta.prototype.selectOption = function (index, force) {
-        var old_index = this._selected_option_index,
-            new_option_data,
-            old_option_data;
+        var old_index = this._selected_option_index;
 
         if (!this._isExistingOption(index)) {
             return;
@@ -510,14 +508,6 @@
         }
 
         this._setSourceSelectedIndex(index);
-
-        new_option_data = this._getOptionData(index);
-        old_option_data = this._getOptionData(old_index);
-
-        this._triggerEvent('optionselect', index, old_index, new_option_data.value, old_option_data.value,
-            new_option_data.text, old_option_data.text);
-        this._triggerEvent('change', new_option_data.value, old_option_data.value, new_option_data.text,
-            old_option_data.text, index, old_index);
     };
 
 
@@ -1856,7 +1846,9 @@
         var old_index = this._selected_option_index,
             index = this._source_select.selectedIndex,
             classname,
-            old_element;
+            old_element,
+            old_option_data,
+            new_option_data;
 
         // Save initially selected index to use after form reset
         if (!_isNumber(this._initial_selected_option_index)) {
@@ -1878,6 +1870,14 @@
         this._selected_option_index = index;
 
         this._refreshFacade(index);
+
+        new_option_data = this._getOptionData(index);
+        old_option_data = this._getOptionData(old_index);
+
+        this._triggerEvent('optionselect', index, old_index, new_option_data.value, old_option_data.value,
+            new_option_data.text, old_option_data.text);
+        this._triggerEvent('change', new_option_data.value, old_option_data.value, new_option_data.text,
+            old_option_data.text, index, old_index);
     };
 
 
