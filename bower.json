@@ -1,7 +1,7 @@
 {
   "name": "celesta",
   "main": "celesta.js",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "homepage": "https://github.com/thybzi/celesta",
   "authors": [
     "Evgeni Dmitriev <thybzi@gmail.com>"

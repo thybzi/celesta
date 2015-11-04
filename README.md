@@ -107,6 +107,7 @@ API methods, option names, event callback interface, CSS classnames etc. can be 
 
 ### Version history ###
 
+* **0.3.1** *(2015-11-05)*: Minor fix for mobile detection
 * **0.3.0** *(2015-11-05)*:
   * Seemless dropdown fallback on mobile devices
   * Source select is moved inside Celesta container (no more kept next to the container)
