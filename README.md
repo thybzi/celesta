@@ -91,7 +91,6 @@ API methods, option names, event callback interface, CSS classnames etc. can be 
 ### Todo list & known issues ###
 
 * `multiple` select support
-* PageUp/PageDown behavior isn't perfect, and not always matching native select behavior
 * jQuery plugin
 * Make work better with [jScrollPane](http://jscrollpane.kelvinluck.com/)
 * UX testing on mobile devices
