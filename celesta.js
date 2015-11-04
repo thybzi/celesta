@@ -95,7 +95,7 @@
 
 
     var IS_IE = ('ActiveXObject' in window), // detect IE11-
-        IS_MOBILE = navigator.userAgent.match(/iPad|iPhone|iPod|Android|IEMobile|BlackBerry/i), // detect mobile
+        IS_MOBILE = /iPad|iPhone|iPod|Android|IEMobile|BlackBerry/i.test(navigator.userAgent), // detect mobile
         KEYCODE_ENTER = 13,
         KEYCODE_SPACE = 32,
         KEYCODE_BACKSPACE = 8,
