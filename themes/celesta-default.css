@@ -13,7 +13,7 @@
   -moz-user-select: none;
   user-select: none;
 }
-.celesta-container + select {
+.celesta-container select {
   position: absolute;
   left: -20000px;
   top: -20000px;

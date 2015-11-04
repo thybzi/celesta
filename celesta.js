@@ -811,6 +811,8 @@
             this._source_select.form.removeEventListener('reset', this._formResetListener);
         }
 
+        this._container.parentNode.insertBefore(this._source_select, this._container);
+
         trashbin = this._dummy_element;
         trashbin.appendChild(this._container);
         trashbin.innerHTML = '';
@@ -913,6 +915,7 @@
         this._container.addEventListener('blur', this.close.bind(this));
 
         this._source_select.parentNode.insertBefore(this._container, this._source_select);
+        this._container.insertBefore(this._source_select, this._facade);
 
         this._is_initialized = true;
     };

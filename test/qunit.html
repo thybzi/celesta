@@ -107,16 +107,19 @@
         wrapper.innerHTML = M_SELECT_SIMPLE;
         var celesta = new Celesta(wrapper.firstElementChild),
             container = celesta.getContainer(),
+            select = celesta.getSourceSelect(),
             facade = celesta.getFacade(),
             optlist = celesta.getOptlist();
 
         assert.strictEqual(qsa(S_CONTAINER).length, 1, 'container created');
         assert.strictEqual(qs(S_CONTAINER), container, 'container valid');
-        assert.strictEqual(container.childNodes.length, 2, 'container has two children');
-        assert.strictEqual(container.childNodes[0], facade, 'container first child is facade');
-        assert.ok(container.childNodes[0].classList.contains(C_FACADE), 'container first child has valid classname for facade');
-        assert.strictEqual(container.childNodes[1], optlist, 'container second child is optlist');
-        assert.ok(container.childNodes[1].classList.contains(C_OPTLIST), 'container second child has valid classname for optlist');
+        assert.strictEqual(container.childNodes.length, 3, 'container has three children');
+
+        assert.strictEqual(container.childNodes[0], select, 'container first child is source select');
+        assert.strictEqual(container.childNodes[1], facade, 'container second child is facade');
+        assert.ok(container.childNodes[1].classList.contains(C_FACADE), 'container second child has valid classname for facade');
+        assert.strictEqual(container.childNodes[2], optlist, 'container third child is optlist');
+        assert.ok(container.childNodes[2].classList.contains(C_OPTLIST), 'container third child has valid classname for optlist');
 
         assert.strictEqual(optlist.childNodes.length, 3, 'optlist has three children');
         assert.ok(optlist.childNodes[0].classList.contains(C_OPTION), 'optlist first child has valid classname for option');
