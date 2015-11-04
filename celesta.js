@@ -1846,7 +1846,6 @@
         var old_index = this._selected_option_index,
             index = this._source_select.selectedIndex,
             classname,
-            old_element,
             old_option_data,
             new_option_data;
 
@@ -1855,24 +1854,25 @@
             this._initial_selected_option_index = index;
         }
 
-        classname = this._getClassname('option', 'selected');
-        old_element = this._getOptionElement(old_index);
-        if (old_element) {
-            old_element.classList.remove(classname);
+        if (!this._isExistingOption(index)) {
+            index = undefined;
         }
 
-        if (_isNumber(index) && (index >= 0)) {
-            this._getOptionElement(index).classList.add(classname);
-        } else {
-            index = undefined;
+        old_option_data = this._getOptionData(old_index);
+        new_option_data = this._getOptionData(index);
+        classname = this._getClassname('option', 'selected');
+
+        if (old_option_data.element) {
+            old_option_data.element.classList.remove(classname);
+        }
+
+        if (new_option_data.element) {
+            new_option_data.element.classList.add(classname);
         }
 
         this._selected_option_index = index;
 
         this._refreshFacade(index);
-
-        new_option_data = this._getOptionData(index);
-        old_option_data = this._getOptionData(old_index);
 
         this._triggerEvent('optionselect', index, old_index, new_option_data.value, old_option_data.value,
             new_option_data.text, old_option_data.text);
