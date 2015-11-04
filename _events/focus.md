@@ -1,4 +1,4 @@
 ---
 order: 10
 ---
-Celesta DOM element obtains focus
+Celesta DOM element (or native select in fallback mode) obtains focus

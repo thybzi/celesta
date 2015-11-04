@@ -1,4 +1,4 @@
 ---
 order: 20
 ---
-Celesta DOM element loses focus
+Celesta DOM element (or native select in fallback mode) loses focus

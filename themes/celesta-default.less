@@ -13,7 +13,7 @@
     color: @celesta-text-color;
     .user-select(none);
 
-    & + select {
+    select {
         position: absolute;
         left: -20000px;
         top: -20000px;
@@ -140,19 +140,19 @@
             color: @celesta-option-selected-text-color;
         }
 
+        &.celesta-option-disabled {
+            background-color: inherit;
+            color: inherit;
+            opacity: @celesta-disabled-opacity;
+            cursor: default;
+        }
+
         &.celesta-option-hovered when not (@celesta-option-hovered-background-color = no-change) {
             background-color: @celesta-option-hovered-background-color;
         }
 
         &.celesta-option-hovered when not (@celesta-option-hovered-text-color = no-change) {
             color: @celesta-option-hovered-text-color;
-        }
-
-        &.celesta-option-disabled {
-            background-color: inherit;
-            color: inherit;
-            opacity: @celesta-disabled-opacity;
-            cursor: default;
         }
     }
 
@@ -185,7 +185,7 @@
 
     &:focus {
         outline: none;
-        .box-shadow(0 0 2px @celesta-stroke-color-focused);
+        .box-shadow(@celesta-focus-shade);
 
         .celesta-facade,
         .celesta-optlist {
@@ -199,6 +199,23 @@
 
         .celesta-facade {
             cursor: default;
+        }
+    }
+
+
+    &.celesta-container-fallback {
+
+        select {
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            z-index: @celesta-fallback-select-zindex;
+            opacity: 0;
+
+            &:focus + .celesta-facade {
+                .box-shadow(@celesta-focus-shade);
+            }
         }
     }
 }

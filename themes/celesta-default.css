@@ -13,7 +13,7 @@
   -moz-user-select: none;
   user-select: none;
 }
-.celesta-container + select {
+.celesta-container select {
   position: absolute;
   left: -20000px;
   top: -20000px;
@@ -129,14 +129,14 @@
 .celesta-container .celesta-option.celesta-option-selected {
   color: #cc0000;
 }
-.celesta-container .celesta-option.celesta-option-hovered {
-  background-color: #ddddff;
-}
 .celesta-container .celesta-option.celesta-option-disabled {
   background-color: inherit;
   color: inherit;
   opacity: 0.5;
   cursor: default;
+}
+.celesta-container .celesta-option.celesta-option-hovered {
+  background-color: #ddddff;
 }
 .celesta-container.celesta-container-open .celesta-facade {
   -webkit-border-radius: 3px 3px 0 0;
@@ -171,4 +171,17 @@
 }
 .celesta-container.celesta-container-disabled .celesta-facade {
   cursor: default;
+}
+.celesta-container.celesta-container-fallback select {
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 1;
+  opacity: 0;
+}
+.celesta-container.celesta-container-fallback select:focus + .celesta-facade {
+  -webkit-box-shadow: 0 0 2px #7a9cd3;
+  -moz-box-shadow: 0 0 2px #7a9cd3;
+  box-shadow: 0 0 2px #7a9cd3;
 }

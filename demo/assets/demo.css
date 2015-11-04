@@ -163,7 +163,8 @@ form {
     opacity: 0.6;
 }
 
-.celesta-container + select[data-visible] {
-    left: 500px;
-    top: auto;
+.celesta-container select[data-visible] {
+    left: 100%;
+    top: 0;
+    margin-left: 30px;
 }

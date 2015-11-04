@@ -8,4 +8,4 @@ args:
   new_text: string
   old_text: string
 ---
-Option is hovered/focused (by user action or [API function]({{ site.baseurl }}/methods/#hoveroption))
+Option is hovered/focused (by user action or [API function]({{ site.baseurl }}/methods/#hoveroption)); only works in non-fallback mode
