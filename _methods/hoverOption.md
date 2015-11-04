@@ -3,6 +3,7 @@ order: 150
 args: 
   index: number
   is_mouse: boolean=false
+  force: boolean=false
 ---
 Hovers (focuses) an option by index.
 

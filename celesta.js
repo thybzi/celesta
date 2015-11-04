@@ -11,7 +11,7 @@
  *  ? Android Browser 4+ (or 2+ with classList and bind polyfills)
  *  ? Opera Mobile 12+
  *  ? IE Mobile 10+
- * @version 0.1.0
+ * @version 0.2.0
  * @see https://github.com/thybzi/celesta
  * @author Evgeni Dmitriev <thybzi@gmail.com>
  */
@@ -221,8 +221,9 @@
      * @typedef {object} CelestaOptionsDataItem
      * @property {string} value
      * @property {string} text
-     * @property {DOMTokenList} classList
+     * @property {DOMTokenList} classlist
      * @property {boolean} is_disabled
+     * @property {number} jumpmap_index
      * @property {boolean} is_first_in_optgroup
      * @property {HTMLElement} element
      * @property {HTMLOptionElement} src_element
@@ -230,6 +231,9 @@
 
     /** @type {CelestaOptionsDataItem[]} */
     Celesta.prototype._options_data = undefined;
+
+    /** @type {(number|(number|undefined)[])[]} */
+    Celesta.prototype._options_jumpmap = undefined;
 
     /** @type {number} */
     Celesta.prototype._options_last_index = undefined;
@@ -367,7 +371,7 @@
         }
 
         this._container.classList.add(this._getClassname('container', 'open'));
-        this.hoverOption(this._selected_option_index);
+        this.hoverOption(this._selected_option_index, false, true);
 
         if (this._config.optlist_smart_reverse) {
             this._optlistSmartReverse();
@@ -536,8 +540,9 @@
      * Works only on open Celesta
      * @param {number} index Index of option to hover
      * @param {boolean=false} [is_mouse] Indicates whether event comes from mouse or keyboard action
+     * @param {boolean=false} [force] Hover option even if it is disabled
      */
-    Celesta.prototype.hoverOption = function (index, is_mouse) {
+    Celesta.prototype.hoverOption = function (index, is_mouse, force) {
         var old_index = this._hovered_option_index,
             classname,
             old_element,
@@ -550,7 +555,7 @@
             optlist_top,
             optlist_bottom;
 
-        if (!this._is_open || (index === old_index) || !this._isSelectableOption(index)) {
+        if (!this._is_open || (index === old_index) || !(force || this._isSelectableOption(index))) {
             return;
         }
 
@@ -724,7 +729,6 @@
 
     /**
      * Clear all quick search text typed previously (as if Backspace was pressed)
-     * @param {string} new_char
      */
     Celesta.prototype.resetTyped = function () {
         clearTimeout(this._typed_timer);
@@ -1355,7 +1359,7 @@
 
     /**
      * Find selectable option index previous to passed
-     * @param {number} initial_index
+     * @param {number} [initial_index] Starting point option index (current selected/hovered index by default)
      * @returns {number|undefined}
      * @private
      */
@@ -1365,7 +1369,7 @@
 
     /**
      * Find selectable option index next to passed
-     * @param {number} initial_index
+     * @param {number} [initial_index] Starting point option index (current selected/hovered index by default)
      * @returns {number|undefined}
      * @private
      */
@@ -1375,140 +1379,114 @@
 
 
     /**
-     * Get target option index for jump to
-     * @param {number|boolean} jump_by Desired index delta
-     * @param {number} initial_index Starting point option index
+     * Get target option index for the jump
+     * @param {number|boolean} jump_by Desired index delta (boolean for visual page jump)
+     * @param {number} [initial_index] Starting point option index (current selected/hovered index by default)
      * @returns {number|undefined} Target option index, or undefined if no appropriate option found
-     * @todo this method should be refactored or rewritten completely
-     * @todo imitate native algorithm of counting optgroup labels and disabled options while skipping them
      * @private
      */
     Celesta.prototype._getSelectableOption = function (jump_by, initial_index) {
-        if (!(_isNumber(jump_by) && jump_by) && !(_isBoolean(jump_by) && this._is_open)) {
+        var jump_by_number = _isNumber(jump_by),
+            jump_by_boolean = _isBoolean(jump_by);
+
+        // Other types of jump value not allowed
+        if (!jump_by_number && !jump_by_boolean) {
             return;
         }
 
-        var items_count = this._getOptionsData().length,
-            options_nav_cycling = this._config.options_nav_cycling,
-            jump_size,
-            sign,
-            extremum_index,
-            index,
-            i,
-            j;
+        // Boolean (i.e. "visual") jump not allowed on closed Celesta
+        if (jump_by_boolean && !this._is_open) {
+            return;
+        }
 
+        var target_index,
+            sign = ((jump_by === true) || (jump_by > 0)) ? 1 : -1,
+            is_forward_direction = (sign === 1),
+            options_data,
+            last_enabled_index,
+            assumed_index,
+            current_index,
+            assumed_edge,
+            current_edge;
+
+        // If initial index not passed, get current active option index
         if (!initial_index) {
             initial_index = this._is_open ? this._hovered_option_index : this._selected_option_index;
         }
 
+        // Get options data to cycle through
+        options_data = this._getOptionsData();
 
-        if (_isNumber(jump_by)) {
-            jump_size = Math.abs(jump_by);
-            sign = jump_by / jump_size;
-            extremum_index = (jump_by > 0) ? this._options_last_index : 0;
-        } else if (_isBoolean(jump_by)) {
-            sign = jump_by ? 1 : -1;
-            extremum_index = jump_by ? this._options_last_index : 0;
-            jump_size = __getOutwardJumpSize.call(this);
-            if (!jump_size) {
-                if (options_nav_cycling) {
-                    jump_size = 1;
-                } else {
-                    return;
-                }
+        if (jump_by_number) {
+
+            // Number jump: get assumed index using jumpmap
+            assumed_index = this._options_jumpmap[options_data[initial_index].jumpmap_index + jump_by];
+
+            // If assumed index hits optgroup label or disabled index, get assumed index considering jump direction
+            if (_isArray(assumed_index)) {
+                assumed_index = is_forward_direction ? assumed_index[1] : assumed_index[0];
             }
-            jump_by = jump_size * sign;
-        }
 
-        for (i = 0; i < items_count; i++) {
-            index = initial_index + jump_by + (i * sign);
+            // If assumed index is still unknown, cycle through options and remember last enabled option in the jump direction
+            if (_isUndefined(assumed_index)) {
+                assumed_index = is_forward_direction ? 0 : this._options_last_index;
 
-            // Options list boundary crossed
-            if (__boundaryCrossed()) {
-                if (options_nav_cycling) {
-                    // Cycle if possible
-                    index -= items_count * sign;
-                } else {
-                    // If options at jump target and beyond are unavailable, last chance is to jump to a closer option
-                    if (jump_size > 1) {
-                        for (j = jump_size; j > 1; j--) {
-                            index = initial_index + (j * sign);
-                            if (this._isSelectableOption(index)) {
-                                return index;
-                            }
+                current_index = initial_index + sign;
+                while (this._isExistingOption(current_index)) {
+                    if (!this._isDisabledOption(current_index)) {
+                        last_enabled_index = current_index;
+                        if ((sign * current_index) >= (sign * assumed_index)) {
+                            target_index = current_index;
+                            break;
                         }
                     }
-                    break;
+                    current_index += sign;
                 }
+            } else {
+                target_index = assumed_index;
             }
-            if (!this._isDisabledOption(index)) {
-                return index;
+
+        } else if (jump_by_boolean) {
+
+            // Visual jump: get assumed index using geometry
+
+            // First, calculate assumed element edge position
+            assumed_edge = options_data[initial_index].element.offsetTop + (sign * this._getOptlistInnerHeight());
+            if (!is_forward_direction) {
+                assumed_edge += options_data[initial_index].element.offsetHeight;
+            }
+
+            // Cycle through options and remember last enabled option in the jump direction
+            current_index = initial_index + sign;
+            while (this._isExistingOption(current_index)) {
+                if (!this._isDisabledOption(current_index)) {
+                    last_enabled_index = current_index;
+
+                    current_edge = options_data[current_index].element.offsetTop;
+                    if (is_forward_direction) {
+                        current_edge += options_data[current_index].element.offsetHeight;
+                    }
+
+                    if ((sign * current_edge) >= (sign * assumed_edge)) {
+                        break;
+                    }
+                }
+                current_index += sign;
             }
         }
 
-        return undefined;
-
-
-        /**
-         * Detect whether last item selectable item is crossed (and maybe we should go to the very beginning)
-         * Works for both forward and backward list run
-         * @returns {boolean}
-         * @private
-         */
-        function __boundaryCrossed() {
-            return (index * sign) > (extremum_index * sign);
+        // If target index is still unknown
+        if (_isUndefined(target_index)) {
+            if (!_isUndefined(last_enabled_index)) {
+                // Set target index to the last enabled option index in the jump direction
+                target_index = last_enabled_index;
+            } else if (this._config.options_nav_cycling) {
+                // Cycle over the edge of the option list if enabled
+                target_index = is_forward_direction ? 0 : this._options_last_index;
+            }
         }
 
-        /**
-         * Detect jump size for page jump (jump to first invisible item, as if PageDown is pressed on open selectbox)
-         * @param {boolean} turn_page
-         * @returns {number}
-         * @private
-         */
-        function __getOutwardJumpSize(turn_page) {
-            var jump_size = turn_page ? -1 : 0,
-                options_data = this._getOptionsData(),
-                option_value,
-                optlist_value = sign * this._getOptlistInnerTop(),
-                optlist_height_factor = 0;
-
-            if (sign > 0) {
-                optlist_height_factor++;
-            }
-            if (turn_page) {
-                optlist_height_factor++;
-            }
-
-            if (optlist_height_factor) {
-                optlist_value += this._getOptlistInnerHeight() * optlist_height_factor;
-            }
-
-
-            for (i = 0; i < items_count; i++) {
-                index = initial_index + (i * sign);
-
-                if (__boundaryCrossed()) {
-                    break;
-                }
-
-                option_value = (options_data[index].element.offsetTop * sign);
-                if (sign > 0) {
-                    option_value += (options_data[index].element.offsetHeight * sign);
-                }
-                if (option_value > optlist_value) {
-                    break;
-                }
-                jump_size++;
-            }
-
-            if (!turn_page && (jump_size === 1)) {
-                jump_size = __getOutwardJumpSize.call(this, true);
-            } else if (turn_page && (jump_size < 0)) {
-                jump_size = 0;
-            }
-
-            return jump_size;
-        }
+        return target_index;
     };
 
 
@@ -1527,6 +1505,7 @@
             i;
 
         this._options_data = [];
+        this._options_jumpmap = [];
         this._options_last_index = this._source_select.options.length - 1;
 
         for (i = 0; i <= this._options_last_index; i++) {
@@ -1563,10 +1542,13 @@
                 text: src_option.text,
                 classlist: src_option.classList,
                 is_disabled: is_disabled,
+                jumpmap_index: undefined,
                 is_first_in_optgroup: false,
                 element: option,
                 src_element: src_option
             });
+
+            this._options_jumpmap.push(is_disabled ? [undefined, undefined, i] : i);
         }
     };
 
@@ -1591,6 +1573,10 @@
             optgrouplabel,
             option,
             optlist = this._optlist,
+            optgroup_first_option,
+            optgroup_firsts = [],
+            jumpmap_insert_position,
+            last_known_jumpable_option,
             index,
             i,
             j;
@@ -1644,17 +1630,61 @@
             }
 
             src_optgroup_options = src_optgroups[i].querySelectorAll('option');
+            optgroup_first_option = undefined;
             for (j = 0; j < src_optgroup_options.length; j++) {
                 index = _nodeListIndexOf(src_options, src_optgroup_options[j]); // @todo search by src_option, not index
                 option = this._getOptionElement(index);
                 if (j === 0) {
                     this._options_data[index].is_first_in_optgroup = true;
+                    optgroup_first_option = index;
                 }
                 optgroup.appendChild(option);
             }
+            optgroup_firsts.push(optgroup_first_option);
 
             prev_optgroup = optgroup;
             this._optgroups_count++;
+        }
+
+        // Inject optgroup label items to jumpmap
+        jumpmap_insert_position = this._options_jumpmap.length;
+        for (i = this._optgroups_count - 1; i >= 0; i--) {
+            if (!_isUndefined(optgroup_firsts[i])) {
+                jumpmap_insert_position = optgroup_firsts[i];
+            }
+            this._options_jumpmap.splice(jumpmap_insert_position, 0, [undefined, undefined]);
+            jumpmap_insert_position--;
+        }
+
+        // Detect backward jump target for optgroup and disabled option items in jumpmap
+        // Also, actualize jumpmap_index value for option jumpmap items
+        last_known_jumpable_option = undefined;
+        for (i = 0; i < this._options_jumpmap.length; i++) {
+            if (_isNumber(this._options_jumpmap[i])) {
+                // Remember last spotted enabled option index as jumpable
+                last_known_jumpable_option = this._options_jumpmap[i];
+                // Refresh jumpmap index for enabled option
+                this._options_data[this._options_jumpmap[i]].jumpmap_index = i;
+            } else if (_isArray(this._options_jumpmap[i])) {
+                // Apply last known jumpable index for jump beyond optgroup label or disabled option
+                this._options_jumpmap[i][0] = last_known_jumpable_option;
+                // Refresh jumpmap index for disabled option
+                if (_isNumber(this._options_jumpmap[i][2])) {
+                    this._options_data[this._options_jumpmap[i][2]].jumpmap_index = i;
+                }
+            }
+        }
+
+        // Detect forward jump target for optgroup and disabled option items in jumpmap
+        last_known_jumpable_option = undefined;
+        for (i = this._options_jumpmap.length - 1; i >= 0; i--) {
+            if (_isNumber(this._options_jumpmap[i])) {
+                // Remember last spotted enabled option index as jumpable
+                last_known_jumpable_option = this._options_jumpmap[i];
+            } else {
+                // Apply last known jumpable index for jump beyond optgroup label or disabled option
+                this._options_jumpmap[i][1] = last_known_jumpable_option;
+            }
         }
     };
 
@@ -1762,6 +1792,7 @@
             value: undefined,
             text: '',
             is_disabled: undefined,
+            jumpmap_index: undefined,
             is_first_in_optgroup: undefined,
             classlist: this._dummy_element.classList,
             element: undefined,
@@ -2022,6 +2053,16 @@
      */
     function _isString (value) {
         return typeof value === 'string';
+    }
+
+    /**
+     * Indicates whether value passed is array
+     * @param {*} value
+     * @returns {boolean}
+     * @private
+     */
+    function _isArray (value) {
+        return value && (typeof value === 'object') && (value instanceof Array);
     }
 
     /**
