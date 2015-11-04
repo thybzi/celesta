@@ -32,8 +32,9 @@ c.addEventListener('eventname', function (arg1, arg2, arg3) {
     <tbody>
     {% assign events = site.events | sort:"order" %}
     {% for event in events %}
+    {% assign event_name = event.path | split:"/" | last | split:"." | first %}
     <tr>
-        <td><strong>{{ event.path | split:"/" | last | split:"." | first }}</strong></td>
+        <td><strong id="{{ event_name }}">{{ event_name }}</strong></td>
         <td>
             {% unless event.args %}
             <em>(none)</em>

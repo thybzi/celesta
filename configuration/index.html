@@ -41,8 +41,9 @@ Celesta.prototype.setConfigDefaults({
     <tbody>
     {% assign params = site.params | sort:"order" %}
     {% for param in params %}
+    {% assign param_name = param.path | split:"/" | last | split:"." | first %}
     <tr>
-        <td><strong>{{ param.path | split:"/" | last | split:"." | first }}</strong></td>
+        <td><strong id="{{ param_name }}">{{ param_name }}</strong></td>
         <td>{% capture accepted_output %}
             {% for value in param.accepted %}
                 {% if value[1] %}
