@@ -108,4 +108,7 @@ API methods, option names, event callback interface, CSS classnames etc. can be 
 
 ### Version history ###
 
+* **0.2.0** *(2015-11-04)*:
+  * Perfect PageUp/PageDown behavior
+  * Allow disabled option to be selected initially
 * **0.1.0** *(2015-10-12)*: Initial release
