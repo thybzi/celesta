@@ -57,6 +57,7 @@ Also, you can see [the demo](http://thybzi.github.io/celesta/demo/).
 * Dropdown scrolling: 
     * native browser way, or
     * custom scrollbar libs such as [perfect-scrollbar](http://noraesae.github.io/perfect-scrollbar/)
+* Seemless dropdown fallback on mobile devices
 * Mouse support:
     * Focus with associated label click
     * Open with click
@@ -94,8 +95,6 @@ API methods, option names, event callback interface, CSS classnames etc. can be 
 * jQuery plugin
 * Make work better with [jScrollPane](http://jscrollpane.kelvinluck.com/)
 * UX testing on mobile devices
-* (?) Put source select element inside (not after) Celesta container
-* (?) Fall back to native option list on mobile devices
 * (?) Methods call chaining
 * (?) Link to source elements, not indexes (benchmarking needed)
 * (?) Better feature detection on initialization
