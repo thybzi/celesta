@@ -221,7 +221,7 @@
      * @typedef {object} CelestaOptionsDataItem
      * @property {string} value
      * @property {string} text
-     * @property {DOMTokenList} classList
+     * @property {DOMTokenList} classlist
      * @property {boolean} is_disabled
      * @property {number} jumpmap_index
      * @property {boolean} is_first_in_optgroup
@@ -729,7 +729,6 @@
 
     /**
      * Clear all quick search text typed previously (as if Backspace was pressed)
-     * @param {string} new_char
      */
     Celesta.prototype.resetTyped = function () {
         clearTimeout(this._typed_timer);
@@ -1360,7 +1359,7 @@
 
     /**
      * Find selectable option index previous to passed
-     * @param {number} initial_index
+     * @param {number} [initial_index] Starting point option index (current selected/hovered index by default)
      * @returns {number|undefined}
      * @private
      */
@@ -1370,7 +1369,7 @@
 
     /**
      * Find selectable option index next to passed
-     * @param {number} initial_index
+     * @param {number} [initial_index] Starting point option index (current selected/hovered index by default)
      * @returns {number|undefined}
      * @private
      */
@@ -1382,7 +1381,7 @@
     /**
      * Get target option index for the jump
      * @param {number|boolean} jump_by Desired index delta (boolean for visual page jump)
-     * @param {number} initial_index Starting point option index
+     * @param {number} [initial_index] Starting point option index (current selected/hovered index by default)
      * @returns {number|undefined} Target option index, or undefined if no appropriate option found
      * @private
      */
