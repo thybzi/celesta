@@ -63,6 +63,7 @@
      * @property {boolean} [keyboard_hover_preselect]
      * @property {boolean} [mouse_hover_preselect]
      * @property {boolean} [mouse_hover_scroll]
+     * @property {boolean} [fallback_optlist]
      * @property {boolean} [fix_ie_mouse_focus]
      * @property {string} [ie_tagname_prefix]
      * @property {string} [container_tagname]
@@ -70,6 +71,7 @@
      * @property {string} [container_tagname]
      * @property {?string} [container_classname_open]
      * @property {?string} [container_classname_disabled]
+     * @property {?string} [container_classname_fallback]
      * @property {string} [facade_tagname]
      * @property {?string} [facade_classname]
      * @property {?string} [facade_attrname_label]
@@ -93,6 +95,7 @@
 
 
     var IS_IE = ('ActiveXObject' in window), // detect IE11-
+        IS_MOBILE = navigator.userAgent.match(/iPad|iPhone|iPod|Android|IEMobile|BlackBerry/i), // detect mobile
         KEYCODE_ENTER = 13,
         KEYCODE_SPACE = 32,
         KEYCODE_BACKSPACE = 8,
@@ -155,12 +158,14 @@
         keyboard_hover_preselect: true,
         mouse_hover_preselect: false,
         mouse_hover_scroll: true,
+        fallback_optlist: IS_MOBILE,
         fix_ie_mouse_focus: IS_IE,
         ie_tagname_prefix: 'ie-',
         container_tagname: 'span',
         container_classname: 'celesta-container',
         container_classname_open: 'celesta-container-open',
         container_classname_disabled: 'celesta-container-disabled',
+        container_classname_fallback: 'celesta-container-fallback',
         facade_tagname: 'span',
         facade_classname: 'celesta-facade',
         facade_attrname_label: 'data-label',
@@ -281,6 +286,12 @@
     Celesta.prototype._outerWheelListener = undefined;
 
     /** @type {function} */
+    Celesta.prototype._focusListener = undefined;
+
+    /** @type {function} */
+    Celesta.prototype._blurListener = undefined;
+
+    /** @type {function} */
     Celesta.prototype._selectFocusListener = undefined;
 
     /** @type {function} */
@@ -354,11 +365,12 @@
     /**
      * Expand options list
      * Hover current selected option
+     * Doesn't do anything if optlist fallback is used
      */
     Celesta.prototype.open = function () {
         this._requireInitialized();
 
-        if (this._is_open || this._is_disabled) {
+        if (this._config.fallback_optlist || this._is_open || this._is_disabled) {
             return;
         }
 
@@ -795,17 +807,22 @@
 
         this._is_initialized = false;
 
-        if (this._config.handle_mouse) {
-            document.removeEventListener('mousedown', this._outerClickListener);
-
-            if (this._config.outer_mousewheel_close) {
-                document.removeEventListener(_getWheelEventName(), this._outerWheelListener);
-            }
-        }
-
-        this._source_select.removeEventListener('focus', this._selectFocusListener);
         this._source_select.removeEventListener('change', this._selectChangeListener);
-        this._source_select.tabIndex = this.tabIndex;
+
+        if (this._config.fallback_optlist) {
+            this._source_select.removeEventListener('focus', this._focusListener);
+            this._source_select.removeEventListener('blur', this._blurListener);
+        } else {
+            if (this._config.handle_mouse) {
+                document.removeEventListener('mousedown', this._outerClickListener);
+
+                if (this._config.outer_mousewheel_close) {
+                    document.removeEventListener(_getWheelEventName(), this._outerWheelListener);
+                }
+            }
+            this._source_select.removeEventListener('focus', this._selectFocusListener);
+            this._source_select.tabIndex = this._tabindex;
+        }
 
         if (this._source_select.form) {
             this._source_select.form.removeEventListener('reset', this._formResetListener);
@@ -841,12 +858,14 @@
         this._source_select = select;
 
         this._container = this._generateElement('container');
-        this._tabindex = this._source_select.tabIndex || 0; // @todo is it needed: '|| 0'?;
-        //this._container.tabIndex = this._tabindex;
-        this._source_select.tabIndex = -1;
 
-        this._selectFocusListener = this._selectFocusHandler.bind(this);
-        this._source_select.addEventListener('focus', this._selectFocusListener);
+        if (this._config.fallback_optlist) {
+            this._container.classList.add(this._getClassname('container', 'fallback'));
+        } else {
+            this._tabindex = this._source_select.tabIndex || 0; // @todo is it needed: '|| 0'?;
+            //this._container.tabIndex = this._tabindex; // this is done within _refresh => _setDisabled
+            this._source_select.tabIndex = -1;
+        }
 
         this._container_width = this._config.width;
         this._container_width_inherited = (this._container_width === null) && this._config.inherit_width;
@@ -888,31 +907,43 @@
             this._source_select.form.addEventListener('reset', this._formResetListener);
         }
 
-        if (this._config.handle_keyboard_typed) {
-            this._container.addEventListener('keypress', this._typeHandler.bind(this));
-        }
+        this._focusListener = this._triggerEvent.bind(this, 'focus');
+        this._blurListener = this._triggerEvent.bind(this, 'blur');
 
-        if (this._config.handle_arrowkeys || this._config.handle_pagekeys || this._config.enter_key_select ||
-            this._config.enter_key_open || this._config.space_key_open || this._config.escape_key_close ||
-            this._config.handle_keyboard_typed
-        ) {
-            this._container.addEventListener('keydown', this._keyHandler.bind(this));
-        }
+        if (this._config.fallback_optlist) {
+            this._source_select.addEventListener('focus', this._focusListener);
+            this._source_select.addEventListener('blur', this._blurListener);
+        } else {
+            this._selectFocusListener = this._selectFocusHandler.bind(this);
+            this._source_select.addEventListener('focus', this._selectFocusListener);
 
-        if (this._config.handle_mouse) {
-            this._facade.addEventListener('mousedown', this.toggle.bind(this, true));
-            this._outerClickListener = this._outerClickHandler.bind(this);
-            document.addEventListener('mousedown', this._outerClickListener);
-
-            if (this._config.outer_mousewheel_close) {
-                this._outerWheelListener = this._outerWheelHandler.bind(this);
-                document.addEventListener(_getWheelEventName(), this._outerWheelListener);
+            if (this._config.handle_keyboard_typed) {
+                this._container.addEventListener('keypress', this._typeHandler.bind(this));
             }
+
+            if (this._config.handle_arrowkeys || this._config.handle_pagekeys || this._config.enter_key_select ||
+                this._config.enter_key_open || this._config.space_key_open || this._config.escape_key_close ||
+                this._config.handle_keyboard_typed
+            ) {
+                this._container.addEventListener('keydown', this._keyHandler.bind(this));
+            }
+
+            if (this._config.handle_mouse) {
+                this._facade.addEventListener('mousedown', this.toggle.bind(this, true));
+                this._outerClickListener = this._outerClickHandler.bind(this);
+                document.addEventListener('mousedown', this._outerClickListener);
+
+                if (this._config.outer_mousewheel_close) {
+                    this._outerWheelListener = this._outerWheelHandler.bind(this);
+                    document.addEventListener(_getWheelEventName(), this._outerWheelListener);
+                }
+            }
+
+            this._container.addEventListener('focus', this._focusListener);
+            this._container.addEventListener('blur', this._blurListener);
+            this._container.addEventListener('blur', this.close.bind(this));
         }
 
-        this._container.addEventListener('focus', this._triggerEvent.bind(this, 'focus'));
-        this._container.addEventListener('blur', this._triggerEvent.bind(this, 'blur'));
-        this._container.addEventListener('blur', this.close.bind(this));
 
         this._source_select.parentNode.insertBefore(this._container, this._source_select);
         this._container.insertBefore(this._source_select, this._facade);
@@ -977,7 +1008,7 @@
         if (value) {
             this._container.removeAttribute('tabindex');
         } else {
-            this._container.tabIndex = this._tabindex;
+            this._container.tabIndex = this._config.fallback_optlist ? -1 : this._tabindex;
         }
 
         if (!skip_select) {
