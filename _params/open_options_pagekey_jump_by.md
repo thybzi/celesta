@@ -5,4 +5,4 @@ accepted:
   true: true
 default: true
 ---
-PageUp/PageDown jump size on open Celesta (`true` for jump to first invisible or partially visible item)
+<kbd>PageUp</kbd>/<kbd>PageDown</kbd> jump size on open Celesta (`true` for jump to first invisible or partially visible item)

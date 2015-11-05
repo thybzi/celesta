@@ -3,4 +3,4 @@ order: 130
 accepted: boolean
 default: true
 ---
-Handle pressing PageUp/PageDown keys
+Handle pressing <kbd>PageUp</kbd>/<kbd>PageDown</kbd> keys

@@ -1,7 +1,7 @@
 ---
 order: 240
 ---
-Act as if ArrowDown (↓) key is pressed (selects/hovers *next available* option).
+Act as if ArrowDown (<kbd>↓</kbd>) key is pressed (selects/hovers *next available* option).
 {% highlight javascript %}
 // assuming you have months option list with September currently selected
 c.getValue(); // => 'september'

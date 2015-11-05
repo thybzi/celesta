@@ -3,4 +3,4 @@ order: 210
 accepted: number
 default: 3
 ---
-PageUp/PageDown jump size on closed Celesta
+<kbd>PageUp</kbd>/<kbd>PageDown</kbd> jump size on closed Celesta

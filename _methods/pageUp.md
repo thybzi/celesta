@@ -1,7 +1,7 @@
 ---
 order: 250
 ---
-Acts as if PageUp key is pressed (skips several options up). The jump size differs depending on open state, and relies on values for options `closed_options_pagekey_jump_by` and `open_options_pagekey_jump_by`.
+Acts as if <kbd>PageUp</kbd> key is pressed (skips several options up). The jump size differs depending on open state, and relies on values for options `closed_options_pagekey_jump_by` and `open_options_pagekey_jump_by`.
 {% highlight javascript %}
 // assuming that Celesta is currently closed, and jumps by 3 items by default
 // also assuming it contains a list of months with September currently selected
