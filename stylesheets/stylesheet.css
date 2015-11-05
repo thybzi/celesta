@@ -188,6 +188,10 @@ pre code {
   box-shadow: none;
 }
 
+table code {
+  word-break: break-all;
+}
+
 blockquote {
   color: #666;
   margin-bottom: 20px;
