@@ -54,7 +54,10 @@ Celesta.prototype.setConfigDefaults({
                 {% unless forloop.last %}&nbsp;|&nbsp;{% endunless %}
             {% endfor %}
         {% endcapture %}{{ accepted_output | replace:" ","" | strip_newlines }}</td>
-        <td><code>{{ param.default }}</code></td>
+        <td>
+            {% capture length %}{{ param.default | size }}{% endcapture %}
+            <code{% if length > 30 %} class="safe"{% endif %}>{{ param.default }}</code>
+        </td>
         <td>{{ param.content | replace:"<p>","" | replace:"</p>","" }}</td>
     </tr>
     {% endfor %}

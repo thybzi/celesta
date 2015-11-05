@@ -188,7 +188,7 @@ pre code {
   box-shadow: none;
 }
 
-table code {
+code.safe {
   word-break: break-all;
 }
 
