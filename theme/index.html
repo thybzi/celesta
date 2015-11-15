@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet/less" href="../themes/celesta-default.less">
+    <script src="less.js"></script>
+    <script src="../celesta.js"></script>
+    <style>
+        form { width: 500px; float: right; text-align: right; }
+        form div { clear: both; padding-right: 10px; }
+        label, input { margin-top: 5px; width: 240px; }
+        label { float: left; margin-right: 5px; }
+        input { float: left; clear: right; }
+    </style>
+</head>
+<body>
+
+<form>
+    <div>
+        <button type="submit">Download CSS file</button>
+        <button type="reset">Restore defaults</button>
+    </div>
+</form>
+<script>
+    var form = document.scripts[document.scripts.length - 1].previousElementSibling;
+    var values = {
+        'optlist-zindex': '0',
+        'optlist-open-zindex': '1',
+        'optlist-fallback-select-zindex': '1',
+        'visible-options-count': '12',
+        'height': '24px',
+        'pad-x': '8px',
+        'pad-y': '3px',
+        'rounding': '3px',
+        'stroke-size': '1px',
+        'stroke-color': '#aaa',
+        'stroke-color-focused': '#7a9cd3',
+        'background-color': '#fff',
+        'text-color': '#000',
+        'option-selected-background-color': '#eef',
+        'option-selected-text-color': '#c00',
+        'option-hovered-background-color': '#ddf',
+        'option-hovered-text-color': 'no-change',
+        'disabled-opacity': '0.5',
+        'focus-shade': '0 0 2px @celesta-stroke-color-focused',
+        'font-size': '14px',
+        'line-height': '@celesta-height - (2 * @celesta-pad-y)',
+        'arrow-width': '8px',
+        'arrow-height': 'round(@celesta-arrow-width / 2)',
+        'appear-duration': '0.3s',
+        'appear-easing': 'ease'
+    };
+
+    function modifyLessVars() {
+        var inputs = form.querySelectorAll('input');
+        var vars = {};
+        for (var i = 0; i < inputs.length; i++) {
+            vars['@celesta-' + inputs[i].id] = inputs[i].value;
+        }
+        less.modifyVars(vars);
+    }
+
+    function restoreDefaults() {
+        var inputs = form.querySelectorAll('input');
+        for (var i = 0; i < inputs.length; i++) {
+            inputs[i].value = values[inputs[i].id];
+        }
+        modifyLessVars();
+        return false;
+    }
+
+    function downloadCssFile() {
+        var style = document.getElementById('less:celesta_pages-themes-celesta-default').textContent;
+        var pom = document.createElement('a');
+        pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(style));
+        pom.setAttribute('download', 'celesta.css');
+        if (document.createEvent) {
+            var event = document.createEvent('MouseEvents');
+            event.initEvent('click', true, true);
+            pom.dispatchEvent(event);
+        }
+        else {
+            pom.click();
+        }
+        return false;
+    }
+
+    var element;
+    for (var i in values) {
+        if (!values.hasOwnProperty(i)) {
+            continue;
+        }
+
+        element = document.createElement('label');
+        element.for = i;
+        element.textContent = i.replace(/-/g, ' ');
+        form.appendChild(element);
+
+        element = document.createElement('input');
+        element.id = i;
+        element.value = values[i];
+        element.onchange = modifyLessVars;
+        form.appendChild(element);
+    }
+
+    form.onsubmit = downloadCssFile;
+    form.onreset = restoreDefaults;
+
+</script>
+
+<select>
+    <optgroup label="Named with numbers">
+        <option value="1">One Republic</option>
+        <option value="2">Two Steps From Hell</option>
+        <option value="3">Three Days Grace</option>
+        <option value="4">Four Seasons</option>
+        <option value="5">Five Nights At Freddy's</option>
+        <option value="6">Six Feet Under</option>
+        <option value="7">Seven Nation Army</option>
+        <option value="8">Eight Below</option>
+        <option value="9">Nine Inch Nails</option>
+        <option value="10">Ten O'Clock Postman</option>
+        <option value="11">Eleven Madison Park</option>
+        <option value="12">Twelve South</option>
+        <option value="13" disabled>Thirteen Reasons Why</option>
+        <option value="14">Fourteen Actors Acting</option>
+        <option value="15">Fifteen Taylor Swift</option>
+        <option value="16">Sixteen Saltlines</option>
+        <option value="17">Seventeen</option>
+        <option value="18">Eighteen Visions</option>
+        <option value="19">Nineteen Hundred And Eighty Five</option>
+        <option value="20">Twenty Dollars In My Pocket</option>
+    </optgroup>
+    <optgroup label="Disabled optgroup" disabled>
+        <option>These</option>
+        <option>Cannot</option>
+        <option>Be</option>
+        <option>Selected</option>
+    </optgroup>
+    <optgroup label="Guitar players">
+        <option value="satriani">Joe Satriani</option>
+        <option value="blackmore">Richie Blackmore</option>
+        <option value="clapton">Eric Clapton</option>
+        <option value="santana">Carlos Santana</option>
+        <option value="zappa">Frank Zappa</option>
+        <option value="hendrix">Jimi Hendrix</option>
+        <option value="malmsteen">Yngwie J. Malmsteen</option>
+        <option value="berry">Chuck Berry</option>
+        <option value="harrison">George Harrison</option>
+        <option value="burton">James Burton</option>
+        <option value="lennon">John Lennon</option>
+        <option value="paul">Les Paul</option>
+        <option value="tolkki">Timo Tollki</option>
+        <option value="zinchuk">Victor Zinchuk</option>
+    </optgroup>
+    <optgroup label="Domain zones" class="flags">
+        <option value="se" class="flag swe">.se (Sweden)</option>
+        <option value="tr" class="flag tur">.tr (Turkey)</option>
+        <option value="br" class="flag bra">.br (Brazil)</option>
+        <option value="es" class="flag esp">.es (Spain)</option>
+    </optgroup>
+    <optgroup label="Tiny group">
+        <option value="disabled" disabled>Disabled option</option>
+        <option value="enabled">Enabled option</option>
+    </optgroup>
+    <optgroup label="Russian words">
+        <option value="babushka">Бабушка (granny)</option>
+        <option value="krasota">Красота (beauty)</option>
+        <option value="balalaika">Балалайка (balalaika)</option>
+        <option value="electrichka">Электричка (suburban train)</option>
+        <option value="odeyalo">Одеяло (blanket)</option>
+    </optgroup>
+</select>
+
+<script>
+    var celesta = new Celesta(document.scripts[document.scripts.length - 1].previousElementSibling, {
+        inherit_width: true
+    });
+</script>
+
+</body>
+</html>
