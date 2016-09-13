@@ -52,6 +52,7 @@
      * @property {boolean} [enter_key_open]
      * @property {boolean} [space_key_open]
      * @property {boolean} [enter_key_select]
+     * @property {boolean} [space_key_select]
      * @property {boolean} [escape_key_close]
      * @property {boolean} [handle_keyboard_typed]
      * @property {number} [typed_life]
@@ -147,6 +148,7 @@
         enter_key_open: true,
         space_key_open: true,
         enter_key_select: true,
+        space_key_select: true,
         escape_key_close: true,
         handle_keyboard_typed: true,
         typed_life: 1000,
@@ -912,8 +914,8 @@
             }
 
             if (this._config.handle_arrowkeys || this._config.handle_pagekeys || this._config.enter_key_select ||
-                this._config.enter_key_open || this._config.space_key_open || this._config.escape_key_close ||
-                this._config.handle_keyboard_typed
+                this._config.space_key_select || this._config.enter_key_open || this._config.space_key_open ||
+                this._config.escape_key_close || this._config.handle_keyboard_typed
             ) {
                 this._container.addEventListener('keydown', this._keyHandler.bind(this));
             }
@@ -1296,10 +1298,16 @@
                 }
                 break;
             case KEYCODE_SPACE:
-                if (this._config.space_key_open) {
-                    this.open();
-                    // Don't prevent space keypress when already open (used for typed search or default browser action)
-                    if (!this._is_open) {
+                if (this._is_open) {
+                //if we not in the middle of typing, select hovered option
+                    if (this._typed == '' && this._config.space_key_select) {
+                        this.selectOption(this._hovered_option_index);
+                        this.close();
+                        event.preventDefault();
+                    }
+                } else {
+                    if (this._config.space_key_open) {
+                        this.open();
                         event.preventDefault();
                     }
                 }
