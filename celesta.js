@@ -1299,17 +1299,15 @@
                 break;
             case KEYCODE_SPACE:
                 if (this._is_open) {
-                //if we not in the middle of typing, select hovered option
-                    if (this._typed == '' && this._config.space_key_select) {
+                    // If we not in the middle of typing, select hovered option
+                    if (this._config.space_key_select && this._typed.length) {
                         this.selectOption(this._hovered_option_index);
                         this.close();
                         event.preventDefault();
                     }
-                } else {
-                    if (this._config.space_key_open) {
-                        this.open();
-                        event.preventDefault();
-                    }
+                } else if (this._config.space_key_open) {
+                    this.open();
+                    event.preventDefault();
                 }
                 break;
             case KEYCODE_ESCAPE:
