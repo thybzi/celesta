@@ -148,7 +148,7 @@
         enter_key_open: true,
         space_key_open: true,
         enter_key_select: true,
-        space_key_select: true,
+        space_key_select: false,
         escape_key_close: true,
         handle_keyboard_typed: true,
         typed_life: 1000,
