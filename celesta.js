@@ -11,7 +11,7 @@
  *  ? Android Browser 4+ (or 2+ with classList and bind polyfills)
  *  ? Opera Mobile 12+
  *  ? IE Mobile 10+
- * @version 0.3.1
+ * @version 0.4.0
  * @see https://github.com/thybzi/celesta
  * @author Evgeni Dmitriev <thybzi@gmail.com>
  */

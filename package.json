@@ -1,6 +1,6 @@
 {
   "name": "celesta",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "Custom selectbox with look and feel of native one",
   "main": "celesta.js",
   "scripts": {

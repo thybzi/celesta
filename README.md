@@ -107,6 +107,7 @@ API methods, option names, event callback interface, CSS classnames etc. can be 
 
 ### Version history ###
 
+* **0.4.0** *(2016-09-30)*: Add `space_key_select` param (credits to @garyanikin)
 * **0.3.1** *(2015-11-05)*: Minor fix for mobile detection
 * **0.3.0** *(2015-11-05)*:
   * Seemless dropdown fallback on mobile devices
